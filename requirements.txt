@@ -1,0 +1,6 @@
+numpy==1.26.4
+protobuf==3.20.3
+tensorflow-macos==2.16.0
+tensorflow-metal==1.2.0
+cryptography==42.0.5
+ccxt==4.4.78

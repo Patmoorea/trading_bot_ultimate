@@ -1,0 +1,88 @@
+from functools import lru_cache
+import pandas as pd
+import pandas_ta as ta
+import numpy as np
+from typing import Union, Dict, Any
+import logging
+
+class TechnicalAnalyzer:
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+        self.rsi_length = 14
+        self.bbands_length = 20
+        self.bbands_std = 2.0
+
+    def _ensure_numeric(self, data: Union[pd.DataFrame, pd.Series]) -> Union[pd.DataFrame, pd.Series]:
+        """Convertit les données en numérique"""
+        if isinstance(data, pd.DataFrame):
+            return data.apply(pd.to_numeric, errors='coerce')
+        return pd.to_numeric(data, errors='coerce')
+
+    def calculate_rsi_enhanced(self, df: Union[pd.DataFrame, pd.Series]) -> pd.Series:
+        """Version robuste du calcul RSI"""
+        try:
+            close = self._ensure_numeric(df['close'] if isinstance(df, pd.DataFrame) else df)
+            rsi = ta.rsi(close, length=self.rsi_length)
+            return rsi.fillna(50)
+        except Exception as e:
+            self.logger.error(f"Erreur RSI (enhanced): {str(e)}")
+            return pd.Series([50]*len(df), index=df.index)
+
+    def calculate_bbands(self, df: Union[pd.DataFrame, pd.Series]) -> Dict[str, pd.Series]:
+        """Calcul des Bollinger Bands"""
+        try:
+            close = self._ensure_numeric(df['close'] if isinstance(df, pd.DataFrame) else df)
+            bb = ta.bbands(close, length=self.bbands_length, std=self.bbands_std)
+            return {
+                'upper': bb[f'BBU_{self.bbands_length}_{self.bbands_std}'].fillna(close),
+                'middle': bb[f'BBM_{self.bbands_length}_{self.bbands_std}'].fillna(close),
+                'lower': bb[f'BBL_{self.bbands_length}_{self.bbands_std}'].fillna(close)
+            }
+        except Exception as e:
+            self.logger.error(f"Erreur Bollinger Bands: {str(e)}")
+            close = df['close'] if isinstance(df, pd.DataFrame) else df
+            return {
+                'upper': close,
+                'middle': close,
+                'lower': close
+            }
+
+    @lru_cache(maxsize=100)
+    def _cached_rsi(self, close_tuple: tuple) -> pd.Series:
+        """Version interne avec cache pour RSI"""
+        close_series = pd.Series(close_tuple)
+        return self.calculate_rsi_enhanced(close_series)
+
+    @lru_cache(maxsize=100)
+    def _cached_bbands(self, close_tuple: tuple) -> Dict[str, pd.Series]:
+        """Version interne avec cache pour BBands"""
+        close_series = pd.Series(close_tuple)
+        return self.calculate_bbands(close_series)
+
+    def analyze_with_cache(self, df: Union[pd.DataFrame, pd.Series]) -> Dict[str, Any]:
+        """Analyse technique avec système de cache"""
+        try:
+            close = self._ensure_numeric(df['close'] if isinstance(df, pd.DataFrame) else df)
+            close_tuple = tuple(close.values)
+            return {
+                'rsi': self._cached_rsi(close_tuple),
+                'bbands': self._cached_bbands(close_tuple)
+            }
+        except Exception as e:
+            self.logger.error(f"Erreur dans analyze_with_cache: {str(e)}")
+            return self.analyze(df)
+
+    def analyze(self, df: Union[pd.DataFrame, pd.Series]) -> Dict[str, Any]:
+        """Analyse complète"""
+        df = self._ensure_numeric(df)
+        return {
+            'rsi': self.calculate_rsi_enhanced(df),
+            'bbands': self.calculate_bbands(df)
+        }
+def analyze(self, df):
+    """Nouvelle méthode d'analyse"""
+    signals = {
+        'rsi': self._calculate_rsi(df),
+        'macd': self._calculate_macd(df)
+    }
+    return signals

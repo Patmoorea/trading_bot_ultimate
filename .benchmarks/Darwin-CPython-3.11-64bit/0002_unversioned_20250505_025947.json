@@ -1,0 +1,78 @@
+{
+    "machine_info": {
+        "node": "Mac-mini-de-Patrice.local",
+        "processor": "arm",
+        "machine": "arm64",
+        "python_compiler": "Clang 17.0.0 (clang-1700.0.13.3)",
+        "python_implementation": "CPython",
+        "python_implementation_version": "3.11.9",
+        "python_version": "3.11.9",
+        "python_build": [
+            "main",
+            "Apr 14 2025 14:38:16"
+        ],
+        "release": "24.5.0",
+        "system": "Darwin",
+        "cpu": {
+            "python_version": "3.11.9.final.0 (64 bit)",
+            "cpuinfo_version": [
+                9,
+                0,
+                0
+            ],
+            "cpuinfo_version_string": "9.0.0",
+            "arch": "ARM_8",
+            "bits": 64,
+            "count": 10,
+            "arch_string_raw": "arm64",
+            "brand_raw": "Apple M4"
+        }
+    },
+    "commit_info": {
+        "id": "unversioned",
+        "time": null,
+        "author_time": null,
+        "dirty": false,
+        "project": "trading_bot_ultimate",
+        "branch": "(unknown)"
+    },
+    "benchmarks": [
+        {
+            "group": null,
+            "name": "test_performance",
+            "fullname": "tests/benchmark_arbitrage.py::test_performance",
+            "params": null,
+            "param": null,
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 5.829788278788328e-07,
+                "max": 2.9589864425361156e-06,
+                "mean": 7.210091435340507e-07,
+                "stddev": 5.028293827440025e-08,
+                "rounds": 62016,
+                "median": 7.089984137564898e-07,
+                "iqr": 8.300412446260452e-08,
+                "q1": 6.67001586407423e-07,
+                "q3": 7.500057108700275e-07,
+                "iqr_outliers": 452,
+                "stddev_outliers": 21204,
+                "outliers": "21204;452",
+                "ld15iqr": 5.829788278788328e-07,
+                "hd15iqr": 8.749775588512421e-07,
+                "ops": 1386944.9631366204,
+                "total": 0.04471410304540768,
+                "iterations": 1
+            }
+        }
+    ],
+    "datetime": "2025-05-05T02:59:51.812200",
+    "version": "4.0.0"
+}

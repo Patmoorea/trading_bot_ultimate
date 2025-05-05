@@ -1,0 +1,19 @@
+# Environnements virtuels
+venv/
+.venv/
+env/
+
+# Fichiers sensibles
+.env
+*.key
+*.pem
+
+# Cache et logs
+.pytest_cache/
+__pycache__/
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.swp
