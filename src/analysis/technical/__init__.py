@@ -1,6 +1,4 @@
-from src.core.technical import TechnicalAnalyzer
+from .indicators import MultiTimeframeAnalyzer, VolatilityAnalyzer
+from .technical_analyzer import TechnicalAnalyzer  # Ajout de l'import manquant
 
-# Si vous avez besoin de ces imports plus tard, vous pouvez les décommenter
-# from .indicators import MultiTimeframeAnalyzer, VolatilityAnalyzer
-
-__all__ = ['TechnicalAnalyzer']  # Ajoutez les autres classes si nécessaire
+__all__ = ['MultiTimeframeAnalyzer', 'VolatilityAnalyzer', 'TechnicalAnalyzer']

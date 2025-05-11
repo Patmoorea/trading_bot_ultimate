@@ -1,11 +1,8 @@
-import tensorflow as tf
+# Initialisation optimisée M4
+from .performance import optimize_for_m4
 
-# Initialisation automatique du statut GPU
-try:
-    GPU_AVAILABLE = len(tf.config.list_physical_devices('GPU')) > 0
-except:
-    GPU_AVAILABLE = False
+# Initialisation au chargement du module
+optimize_for_m4()
 
-def check_gpu_status():
-    """Retourne le statut actuel du GPU"""
-    return GPU_AVAILABLE
+# Alias pour compatibilité
+configure_m4_precision = optimize_for_m4

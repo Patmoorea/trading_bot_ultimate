@@ -1,5 +1,12 @@
 import ccxt
 
+class FallbackArbitrage:
+    """Wrapper de la fonction existante en classe"""
+    
+    @staticmethod
+    def calculate():
+        return safe_find_arbitrage()
+
 def safe_find_arbitrage():
     try:
         exchange = ccxt.binance()

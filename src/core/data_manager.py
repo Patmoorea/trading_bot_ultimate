@@ -5,11 +5,12 @@ from pandas import DataFrame
 from binance.spot import Spot
 from config.paths import Paths
 
+
 class DataManager:
     def __init__(self, client: Spot):
         self.client = client
         self.cache = {}
-        
+
     def get_klines(self, symbol: str, interval: str, limit: int = 500):
         try:
             klines = self.client.klines(symbol, interval, limit=limit)

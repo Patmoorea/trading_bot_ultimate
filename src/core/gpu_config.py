@@ -1,21 +1,30 @@
+"""Configuration automatique pour Apple Silicon"""
 import tensorflow as tf
 
-def configure_apple_silicon():
-    """Configure TensorFlow for Apple Silicon GPU acceleration"""
-    try:
-        # Vérifier si Metal est disponible
-        gpus = tf.config.list_physical_devices('GPU')
-        if gpus:
-            print(f"GPU Apple Silicon détecté: {gpus}")
-            # Configuration des optimisations spécifiques
-            tf.config.optimizer.set_jit(True)  # Activation XLA
-            tf.config.threading.set_inter_op_parallelism_threads(8)
-            tf.config.threading.set_intra_op_parallelism_threads(8)
-            return True
-        return False
-    except Exception as e:
-        print(f"Warning: Configuration GPU échouée - {str(e)}")
-        return False
+def configure_acceleration():
+    gpus = tf.config.list_physical_devices('GPU')
+    cpus = tf.config.list_physical_devices('CPU')
+    
+    if gpus:
+        try:
+            for gpu in gpus:
+                tf.config.experimental.set_memory_growth(gpu, True)
+            print(f"[ACCELERATION] GPU Metal configurée: {gpus}")
+        except RuntimeError as e:
+            print(f"[WARNING] Erreur configuration GPU: {e}")
+    else:
+        print(f"[INFO] Mode CPU activé: {cpus}")
 
-# Exécuter automatiquement à l'import
-GPU_ACTIVATED = configure_apple_silicon()
+configure_acceleration()
+def configure_gpu():
+    import tensorflow as tf
+    physical_devices = tf.config.list_physical_devices('GPU')
+    if physical_devices:
+        tf.config.set_memory_growth(physical_devices[0], True)
+    print(f"[ACCELERATION] GPU Metal configurée: {physical_devices}")
+def configure_gpu():
+    import tensorflow as tf
+    physical_devices = tf.config.list_physical_devices('GPU')
+    if physical_devices:
+        tf.config.set_memory_growth(physical_devices[0], True)
+    print(f"[ACCELERATION] GPU Metal configurée: {physical_devices}")

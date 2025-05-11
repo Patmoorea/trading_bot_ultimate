@@ -11,3 +11,10 @@ BOT_CONFIG = {
     "RISK_PER_TRADE": 0.02,
     "GPU_ACCELERATION": True
 }
+
+# Optimisation Apple Silicon (M4)
+GPU_CONFIG = {
+    'use_metal': True,
+    'memory_limit': 0.9,  # 90% pour le M4 plus performant
+    'precision': 'mixed_float16'  # Acceleration spécifique M4
+}

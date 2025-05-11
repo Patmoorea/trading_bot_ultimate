@@ -5,6 +5,7 @@ import lz4.frame
 from collections import deque
 from typing import List, Dict  # Ajout des imports de types
 
+
 class WebSocketManager:
     def __init__(self, symbols: List[str], max_buffer=1000):
         self.symbols = symbols
@@ -15,7 +16,7 @@ class WebSocketManager:
         """Établit les connexions WebSocket pour tous les symboles"""
         base_url = "wss://stream.binance.com:9443/ws/"
         streams = [f"{sym.lower()}@kline_1m" for sym in self.symbols]
-        
+
         async with websockets.connect(base_url + "/".join(streams)) as ws:
             while True:
                 msg = await ws.recv()

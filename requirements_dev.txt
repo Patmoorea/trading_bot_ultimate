@@ -1,0 +1,7 @@
+-r requirements.txt
+pytest-cov
+hyperfine
+radon
+safety
+pylint
+ipython

@@ -2,6 +2,7 @@ import logging
 from typing import Dict
 from ccxt import Exchange
 
+
 class ArbitrageEngine:
     def __init__(self, exchange=None):
         self.exchange = exchange or self._create_exchange()

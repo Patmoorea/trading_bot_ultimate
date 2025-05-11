@@ -3,9 +3,10 @@ import optuna
 import numpy as np
 from tensorflow.keras.optimizers import Adam
 
+
 def run_optimization(model, X_train, y_train, X_val, y_val, n_trials=5):
     """Version avec fallback CPU intégré"""
-    
+
     def objective(trial):
         try:
             # Configuration pour chaque essai
@@ -14,7 +15,7 @@ def run_optimization(model, X_train, y_train, X_val, y_val, n_trials=5):
                 optimizer=Adam(learning_rate=lr),
                 loss='mse'
             )
-            
+
             # Entraînement avec gestion d'erreur
             try:
                 history = model.fit(
@@ -25,7 +26,7 @@ def run_optimization(model, X_train, y_train, X_val, y_val, n_trials=5):
                     verbose=0
                 )
                 return history.history['val_loss'][-1]
-            except:
+            except BaseException:
                 # Fallback CPU si échec GPU
                 with tf.device('/CPU:0'):
                     history = model.fit(
@@ -36,7 +37,7 @@ def run_optimization(model, X_train, y_train, X_val, y_val, n_trials=5):
                         verbose=0
                     )
                 return history.history['val_loss'][-1]
-                
+
         except Exception as e:
             print(f"Échec complet de l'essai: {str(e)}")
             return float('inf')

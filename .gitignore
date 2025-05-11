@@ -1,19 +1,29 @@
-# Environnements virtuels
-venv/
+# Environnement
 .venv/
-env/
-
-# Fichiers sensibles
+venv*/
 .env
-*.key
-*.pem
+.env*
 
-# Cache et logs
-.pytest_cache/
+# Fichiers Python
 __pycache__/
-*.log
+*.py[cod]
+*.so
+*.pyd
 
-# IDE
-.idea/
-.vscode/
+# Packages
+lib/
+include/
+share/
+bin/
+
+# Données et logs
+data/
+logs/
+*.log
+*.data
+*.prof
+
+# Système
+.DS_Store
 *.swp
+*.bak

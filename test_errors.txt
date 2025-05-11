@@ -1,0 +1,548 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.11.9, pytest-8.3.5, pluggy-1.5.0 -- /Users/patricejourdan/.pyenv/versions/3.11.9/bin/python
+cachedir: .pytest_cache
+benchmark: 4.0.0 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
+rootdir: /Users/patricejourdan/trading_bot_ultimate
+configfile: pytest.ini
+testpaths: tests
+plugins: asyncio-0.23.5, anyio-4.9.0, cov-4.1.0, vcr-1.0.2, xdist-3.5.0, mock-3.14.0, benchmark-4.0.0, requests-mock-1.12.1
+asyncio: mode=Mode.STRICT
+collecting ... collected 89 items / 9 errors
+
+<Package trading_bot_ultimate>
+  <Package tests>
+    <Dir ai>
+      <Module test_ai_minimal.py>
+        <Function test_ai_import>
+          Test minimal d'import des modules AI
+      <Module test_cnn_lstm.py>
+        <Function test_build_model>
+          Teste la construction du modèle
+        <Function test_model_summary>
+          Teste l'affichage du summary
+        <Function test_input_shape_compatibility>
+          Teste la compatibilité des shapes d'entrée
+      <Module test_cnn_lstm_alt.py>
+        <Function test_optimizer_serialization>
+          Test spécifique pour la sérialisation de l'optimiseur
+        <Function test_safe_model_prediction>
+          Test avec un optimiseur plus stable
+      <Module test_cnn_lstm_updated.py>
+        <Class TestCNNLSTM>
+          <Function test_model_creation>
+      <Module test_cnn_lstm_v2.py>
+        <Function test_model_construction>
+          Teste la construction du modèle CNN-LSTM v2
+        <Function test_model_training>
+          Teste l'entraînement du modèle
+      <Module test_enhanced_cnn_lstm.py>
+        <Function test_enhanced_build>
+      <Module test_hybrid.py>
+        <Class TestHybridAI>
+          <Function test_ppo_model>
+          <Function test_keras_integration>
+        <Function test_environment>
+      <Module test_model_serialization.py>
+        <Function test_model_saving>
+          Teste la sauvegarde/chargement avec custom_objects
+    <Package integration>
+      <Module test_sentiment_integration.py>
+        <Class TestSentimentIntegration>
+          <Function test_combined_analysis>
+      <Module test_telegram_integration.py>
+        <Class TestTelegramIntegration>
+          <Function test_enhanced_alert>
+          <Function test_market_alert>
+    <Dir performance>
+      <Module test_enhanced_ai.py>
+        <Function test_latency>
+    <Package unit>
+      <Package ai>
+        <Module test_ai_integration.py>
+          <Function test_optimization>
+            Test corrigé pour l'optimisation avec mock
+          <Function test_rl>
+            Test simplifié pour RL avec mock
+        <Module test_ai_modules.py>
+          <Class TestAIModules>
+            <Function test_import>
+              Test d'import de base
+            <Function test_gpu_acceleration>
+              Test d'accélération GPU
+        <Module test_ai_optimization_v2.py>
+          <Class TestAIOptimizer>
+            <Function test_optimization>
+        <Module test_hybrid_ai.py>
+          <Function test_predict_method>
+            Test spécifique pour la méthode predict
+        <Module test_optimization_v2.py>
+          <Function test_optimization_edge_cases>
+            Version corrigée du test des cas limites
+          <Function test_stream_manager_basic>
+            Tests de base pour StreamManager
+      <Package analysis>
+        <Module test_news_sentiment.py>
+          <Class TestNewsSentimentAnalyzer>
+            <Function test_fetch_news_success>
+            <Function test_analyze_sentiment[Bullish market trend continues-0.8]>
+            <Function test_analyze_sentiment[Market crash imminent--0.7]>
+            <Function test_analyze_sentiment[Fed announces rate hike--0.3]>
+            <Function test_market_sentiment_calculation>
+            <Function test_news_time_decay>
+        <Module test_social_sentiment.py>
+          <Class TestSocialSentimentAnalyzer>
+            <Function test_fetch_tweets>
+            <Function test_analyze_sentiment[\U0001f680\U0001f680\U0001f680-0.9]>
+            <Function test_analyze_sentiment[Scam alert!--0.8]>
+            <Function test_analyze_sentiment[New partnership announced-0.4]>
+            <Function test_influence_calculation>
+            <Function test_composite_score>
+      <Package core>
+        <Module test_basic.py>
+          <Class TestBasic>
+            <Function test_config_loaded>
+            <Function test_technical_analyzer>
+        <Module test_coverage.py>
+          <Class TestCoverage>
+            <Function test_hybrid_ai_full>
+            <Function test_technical_analyzer_full>
+        <Module test_import.py>
+          <Class TestHybridAI>
+            <Function test_hybrid_ai_initialization>
+            <Function test_prediction>
+        <Module test_risk_management.py>
+          <Class TestRiskManagement>
+            <Function test_initialization>
+            <Function test_position_sizing>
+            <Function test_stop_loss_calculation>
+            <Function test_risk_validation[0.01-True]>
+            <Function test_risk_validation[0.05-True]>
+            <Function test_risk_validation[0.06-False]>
+            <Function test_risk_validation[-0.01-False]>
+      <Package exchanges>
+        <Module test_api.py>
+          <Coroutine test_exchange_apis>
+            Test que tous les exchanges répondent correctement
+        <Module test_exchanges.py>
+          <Coroutine test_binance_ticker>
+            Test avec la fixture mock_binance injectée automatiquement
+          <Coroutine test_bingx_ohlcv>
+            Test avec la fixture mock_bingx injectée automatiquement
+      <Dir technical>
+        <Module test_indicators.py>
+          <Class TestIndicators>
+            <Function test_multi_timeframe>
+            <Function test_atr_calculation>
+        <Module test_technical.py>
+          <Class TestTechnicalAnalysis>
+            <Function test_analyzer_initialization>
+            <Function test_full_analysis>
+      <Module test_ai_integration_DISABLED.py>
+        <Function test_optimization>
+        <Function test_rl>
+      <Module test_ai_system_DISABLED.py>
+        <UnitTestCase TestAISystem>
+          A class whose instances are single test cases.
+          
+          By default, the test code itself should be placed in a method named
+          'runTest'.
+          
+          If the fixture may be used for many test cases, create as
+          many test methods as are needed. When instantiating such a TestCase
+          subclass, specify in the constructor arguments the name of the test method
+          that the instance is to execute.
+          
+          Test authors should subclass TestCase for their own tests. Construction
+          and deconstruction of the test's environment ('fixture') can be
+          implemented by overriding the 'setUp' and 'tearDown' methods respectively.
+          
+          If it is necessary to override the __init__ method, the base class
+          __init__ method must always be called. It is important that subclasses
+          should not change the signature of their __init__ method, since instances
+          of the classes are instantiated automatically by parts of the framework
+          in order to be run.
+          
+          When subclassing TestCase, you can set these attributes:
+          * failureException: determines which exception will be raised when
+              the instance's assertion methods fail; test methods raising this
+              exception will be deemed to have 'failed' rather than 'errored'.
+          * longMessage: determines whether long messages (including repr of
+              objects used in assert methods) will be printed on failure in *addition*
+              to any explicit message passed.
+          * maxDiff: sets the maximum length of a diff in failure messages
+              by assert methods using difflib. It is looked up as an instance
+              attribute so can be configured by individual tests if required.
+          <TestCaseFunction test_cnn_lstm_prediction>
+            Teste les prédictions du CNN-LSTM
+          <TestCaseFunction test_ppo_model_creation>
+            Vérifie que le modèle PPO est correctement créé
+      <Module test_all.py>
+        <UnitTestCase TestImports>
+          A class whose instances are single test cases.
+          
+          By default, the test code itself should be placed in a method named
+          'runTest'.
+          
+          If the fixture may be used for many test cases, create as
+          many test methods as are needed. When instantiating such a TestCase
+          subclass, specify in the constructor arguments the name of the test method
+          that the instance is to execute.
+          
+          Test authors should subclass TestCase for their own tests. Construction
+          and deconstruction of the test's environment ('fixture') can be
+          implemented by overriding the 'setUp' and 'tearDown' methods respectively.
+          
+          If it is necessary to override the __init__ method, the base class
+          __init__ method must always be called. It is important that subclasses
+          should not change the signature of their __init__ method, since instances
+          of the classes are instantiated automatically by parts of the framework
+          in order to be run.
+          
+          When subclassing TestCase, you can set these attributes:
+          * failureException: determines which exception will be raised when
+              the instance's assertion methods fail; test methods raising this
+              exception will be deemed to have 'failed' rather than 'errored'.
+          * longMessage: determines whether long messages (including repr of
+              objects used in assert methods) will be printed on failure in *addition*
+              to any explicit message passed.
+          * maxDiff: sets the maximum length of a diff in failure messages
+              by assert methods using difflib. It is looked up as an instance
+              attribute so can be configured by individual tests if required.
+          <TestCaseFunction test_imports>
+            Teste l'importation de tous les modules requis
+      <Module test_connectivity.py>
+        <Function test_exchange>
+      <Module test_dependencies.py>
+        <Function test_dependency[numpy-1.26.4]>
+          Test individuel pour chaque dépendance
+        <Function test_dependency[pandas-2.1.4]>
+          Test individuel pour chaque dépendance
+        <Function test_dependency[torch-2.2.1]>
+          Test individuel pour chaque dépendance
+        <Function test_dependency[binance-None]>
+          Test individuel pour chaque dépendance
+        <Function test_binance_client_import>
+          Test l'import spécifique utilisé dans le code
+        <Function test_imports[ccxt]>
+        <Function test_imports[tensorflow]>
+        <Function test_imports[stable_baselines3]>
+        <Function test_imports[optuna]>
+        <Function test_imports[pyarrow]>
+        <Function test_imports[lz4]>
+        <Function test_imports[websockets]>
+      <Module test_gpu.py>
+        <Function test_gpu>
+      <Module test_gpu_perf.py>
+        <Function test_gpu>
+      <Module test_min.py>
+        <Function test_placeholder>
+          Test minimaliste de vérification
+      <Module test_minimal.py>
+        <Function test_basic_imports>
+          Test d'importation des modules de base
+      <Module test_risk_manager.py>
+        <UnitTestCase TestAdvancedRiskManager>
+          A class whose instances are single test cases.
+          
+          By default, the test code itself should be placed in a method named
+          'runTest'.
+          
+          If the fixture may be used for many test cases, create as
+          many test methods as are needed. When instantiating such a TestCase
+          subclass, specify in the constructor arguments the name of the test method
+          that the instance is to execute.
+          
+          Test authors should subclass TestCase for their own tests. Construction
+          and deconstruction of the test's environment ('fixture') can be
+          implemented by overriding the 'setUp' and 'tearDown' methods respectively.
+          
+          If it is necessary to override the __init__ method, the base class
+          __init__ method must always be called. It is important that subclasses
+          should not change the signature of their __init__ method, since instances
+          of the classes are instantiated automatically by parts of the framework
+          in order to be run.
+          
+          When subclassing TestCase, you can set these attributes:
+          * failureException: determines which exception will be raised when
+              the instance's assertion methods fail; test methods raising this
+              exception will be deemed to have 'failed' rather than 'errored'.
+          * longMessage: determines whether long messages (including repr of
+              objects used in assert methods) will be printed on failure in *addition*
+              to any explicit message passed.
+          * maxDiff: sets the maximum length of a diff in failure messages
+              by assert methods using difflib. It is looked up as an instance
+              attribute so can be configured by individual tests if required.
+          <TestCaseFunction test_kelly_criterion>
+          <TestCaseFunction test_position_size>
+      <Module test_risk_placeholder.py>
+        <UnitTestCase TestRiskPlaceholder>
+          A class whose instances are single test cases.
+          
+          By default, the test code itself should be placed in a method named
+          'runTest'.
+          
+          If the fixture may be used for many test cases, create as
+          many test methods as are needed. When instantiating such a TestCase
+          subclass, specify in the constructor arguments the name of the test method
+          that the instance is to execute.
+          
+          Test authors should subclass TestCase for their own tests. Construction
+          and deconstruction of the test's environment ('fixture') can be
+          implemented by overriding the 'setUp' and 'tearDown' methods respectively.
+          
+          If it is necessary to override the __init__ method, the base class
+          __init__ method must always be called. It is important that subclasses
+          should not change the signature of their __init__ method, since instances
+          of the classes are instantiated automatically by parts of the framework
+          in order to be run.
+          
+          When subclassing TestCase, you can set these attributes:
+          * failureException: determines which exception will be raised when
+              the instance's assertion methods fail; test methods raising this
+              exception will be deemed to have 'failed' rather than 'errored'.
+          * longMessage: determines whether long messages (including repr of
+              objects used in assert methods) will be printed on failure in *addition*
+              to any explicit message passed.
+          * maxDiff: sets the maximum length of a diff in failure messages
+              by assert methods using difflib. It is looked up as an instance
+              attribute so can be configured by individual tests if required.
+          <TestCaseFunction test_placeholder>
+      <Module test_rsi.py>
+        <Function test_rsi_calculation_basic>
+        <Function test_rsi_edge_cases>
+      <Module test_technical.py>
+        <Class TestTechnicalAnalysis>
+          <Function test_rsi_range>
+            Test que le RSI reste entre 0 et 100
+          <Function test_rsi_window_size[10]>
+            Test avec différentes tailles de fenêtre
+          <Function test_rsi_window_size[14]>
+            Test avec différentes tailles de fenêtre
+          <Function test_rsi_window_size[20]>
+            Test avec différentes tailles de fenêtre
+
+==================================== ERRORS ====================================
+____________ ERROR collecting tests/unit/ai/test_ai_optimization.py ____________
+ImportError while importing test module '/Users/patricejourdan/trading_bot_ultimate/tests/unit/ai/test_ai_optimization.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../.pyenv/versions/3.11.9/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/unit/ai/test_ai_optimization.py:7: in <module>
+    from core import run_optimization, train_rl_agent
+E   ImportError: cannot import name 'run_optimization' from 'core' (/Users/patricejourdan/trading_bot_ultimate/core/__init__.py)
+________________ ERROR collecting tests/unit/core/test_model.py ________________
+tests/unit/core/test_model.py:6: in <module>
+    model.compile(optimizer=optimizer, loss='binary_crossentropy')
+E   AttributeError: 'BaseModel' object has no attribute 'compile'
+_____________ ERROR collecting tests/unit/test_ai_full_DISABLED.py _____________
+ImportError while importing test module '/Users/patricejourdan/trading_bot_ultimate/tests/unit/test_ai_full_DISABLED.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../.pyenv/versions/3.11.9/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/unit/test_ai_full_DISABLED.py:5: in <module>
+    from core.base_model import create_base_model
+E   ModuleNotFoundError: No module named 'core.base_model'
+___________ ERROR collecting tests/unit/test_ai_modules_DISABLED.py ____________
+ImportError while importing test module '/Users/patricejourdan/trading_bot_ultimate/tests/unit/test_ai_modules_DISABLED.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../.pyenv/versions/3.11.9/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/unit/test_ai_modules_DISABLED.py:14: in <module>
+    from src.core.rl_allocation import CapitalAllocationEnv, train_rl_agent
+src/core/rl_allocation.py:5: in <module>
+    from stable_baselines3.common.envs import VecEnv
+E   ImportError: cannot import name 'VecEnv' from 'stable_baselines3.common.envs' (/Users/patricejourdan/.pyenv/versions/3.11.9/lib/python3.11/site-packages/stable_baselines3/common/envs/__init__.py)
+------------------------------- Captured stdout --------------------------------
+=== Testing Hyperparameter Optimization ===
+Best params: None
+
+=== Testing RL Allocation ===
+_________ ERROR collecting tests/unit/test_ai_optimization_DISABLED.py _________
+ImportError while importing test module '/Users/patricejourdan/trading_bot_ultimate/tests/unit/test_ai_optimization_DISABLED.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../.pyenv/versions/3.11.9/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/unit/test_ai_optimization_DISABLED.py:3: in <module>
+    from core import run_optimization, train_rl_agent
+E   ImportError: cannot import name 'run_optimization' from 'core' (/Users/patricejourdan/trading_bot_ultimate/core/__init__.py)
+__________________ ERROR collecting tests/unit/test_import.py __________________
+tests/unit/test_import.py:4: in <module>
+    print('✓ Import réussi:', realtime_dashboard())
+src/visualization/dashboard.py:12: in realtime_dashboard
+    confidence = model.predict(market_data) * 100
+E   AttributeError: 'HybridAIEnhanced' object has no attribute 'predict'
+_________________ ERROR collecting tests/unit/test_imports.py __________________
+ImportError while importing test module '/Users/patricejourdan/trading_bot_ultimate/tests/unit/test_imports.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+tests/unit/test_imports.py:4: in <module>
+    print('✓ News Processor:', news.process_news('Test news'))
+E   AttributeError: 'EnhancedNewsProcessor' object has no attribute 'process_news'
+
+During handling of the above exception, another exception occurred:
+../.pyenv/versions/3.11.9/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/unit/test_imports.py:8: in <module>
+    from modules.news_integration import NewsProcessor
+E   ImportError: cannot import name 'NewsProcessor' from 'modules.news_integration' (/Users/patricejourdan/trading_bot_ultimate/modules/news_integration.py)
+------------------------------- Captured stdout --------------------------------
+⚠️ Error: 'EnhancedNewsProcessor' object has no attribute 'process_news'
+ℹ️ Falling back to basic version...
+__________________ ERROR collecting tests/unit/test_model.py ___________________
+tests/unit/test_model.py:6: in <module>
+    model.compile(optimizer=optimizer, loss='binary_crossentropy')
+E   AttributeError: 'BaseModel' object has no attribute 'compile'
+___________ ERROR collecting tests/unit/test_sentiment_adjustment.py ___________
+ImportError while importing test module '/Users/patricejourdan/trading_bot_ultimate/tests/unit/test_sentiment_adjustment.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../.pyenv/versions/3.11.9/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/unit/test_sentiment_adjustment.py:1: in <module>
+    from decision_sentiment_adjustment import adjust_signals_with_sentiment
+decision_sentiment_adjustment.py:1: in <module>
+    from sentiment_influence import compute_sentiment_bias
+sentiment_influence.py:1: in <module>
+    from sentiment_news import get_overall_sentiment
+sentiment_news.py:1: in <module>
+    import feedparser
+E   ModuleNotFoundError: No module named 'feedparser'
+=============================== warnings summary ===============================
+tests/performance/test_enhanced_ai.py:4
+  /Users/patricejourdan/trading_bot_ultimate/tests/performance/test_enhanced_ai.py:4: PytestUnknownMarkWarning: Unknown pytest.mark.performance - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.performance
+
+tests/unit/ai/test_ai_full.py:19
+  /Users/patricejourdan/trading_bot_ultimate/tests/unit/ai/test_ai_full.py:19: DeprecationWarning: Le paramètre X_val est obsolète depuis la v2.0, utiliser validation_data
+    best_params = run_optimization(
+
+tests/unit/ai/test_ai_modules.py:17
+  /Users/patricejourdan/trading_bot_ultimate/tests/unit/ai/test_ai_modules.py:17: PytestUnknownMarkWarning: Unknown pytest.mark.gpu - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.gpu
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+
+---------- coverage: platform darwin, python 3.11.9-final-0 ----------
+Name                                            Stmts   Miss  Cover   Missing
+-----------------------------------------------------------------------------
+src/__init__.py                                     7      3    57%   4-5, 9
+src/ai/__init__.py                                  3      0   100%
+src/ai/cnn_lstm.py                                 13      7    46%   8, 11-16
+src/ai/cnn_lstm_updated.py                         11     11     0%   1-13
+src/ai/enhanced_cnn_lstm.py                        10      5    50%   6, 9-12
+src/ai/hybrid_engine.py                            17      8    53%   6-7, 14-15, 18-19, 31-32
+src/ai/hybrid_model.py                             11     11     0%   1-16
+src/ai/train.py                                    23     23     0%   1-35
+src/analysis/__init__.py                            0      0   100%
+src/analysis/ml/__init__.py                         0      0   100%
+src/analysis/multi_timeframe.py                    17     17     0%   1-34
+src/analysis/sentiment.py                          25     25     0%   4-46
+src/analysis/sentiment/__init__.py                  3      0   100%
+src/analysis/sentiment/news_sentiment.py           34     27    21%   10-11, 14-29, 33-45, 48-56
+src/analysis/sentiment/social_sentiment.py          3      1    67%   8
+src/analysis/technical.py                          69     69     0%   4-102
+src/analysis/technical/__init__.py                  3      0   100%
+src/analysis/technical/advanced_indicators.py       6      6     0%   1-20
+src/analysis/technical/indicators.py               36     23    36%   7-9, 17, 20-22, 26-39, 45, 49, 53-58
+src/analysis/technical/technical_analyzer.py       16     10    38%   7-8, 13-22
+src/config.py                                       7      7     0%   1-14
+src/core/__init__.py                               21      9    57%   8-11, 20-26
+src/core/ai/__init__.py                             1      0   100%
+src/core/ai/hybrid_ai.py                            9      4    56%   3-7
+src/core/ai/hybrid_ai_enhanced.py                  61     44    28%   5, 9-11, 16, 21, 25-27, 31-32, 37, 41-43, 47-48, 53, 61-70, 75, 81-88, 100-110, 115
+src/core/ai_engine.py                              12      7    42%   5, 9, 17-21
+src/core/ai_optimizer.py                           26     17    35%   7, 11-26, 29-35
+src/core/ai_optimizer_enhanced.py                  14      9    36%   6, 10-21
+src/core/ai_optimizer_fallback.py                  22     17    23%   10-47
+src/core/ai_optimizer_patched.py                   15     15     0%   1-37
+src/core/ai_optimizer_robust.py                    18     18     0%   1-33
+src/core/arbitrage.py                              26     26     0%   1-46
+src/core/base_model.py                             12      2    83%   6-12
+src/core/bot.py                                     9      9     0%   1-22
+src/core/config.py                                  8      0   100%
+src/core/data_fetcher.py                            4      0   100%
+src/core/data_manager.py                           15     15     0%   4-25
+src/core/device_manager.py                         31     31     0%   1-41
+src/core/enable_metal.py                           13     13     0%   1-20
+src/core/engine.py                                 13     13     0%   1-17
+src/core/gpu_acceleration.py                       11     11     0%   2-15
+src/core/gpu_check.py                              16     16     0%   1-23
+src/core/gpu_config.py                             25     13    48%   13-16, 20-24, 26-30
+src/core/gpu_setup.py                              15      3    80%   15-17
+src/core/hybrid_ai.py                               5      5     0%   1-10
+src/core/hybrid_ai_enhanced.py                      6      6     0%   1-12
+src/core/logger.py                                 10      8    20%   9-18
+src/core/m4_config.py                              16     16     0%   1-24
+src/core/m4_fallback.py                            11     11     0%   1-14
+src/core/m4_optimizer.py                            1      1     0%   1
+src/core/memory_manager.py                         12     12     0%   1-18
+src/core/metal_check.py                             6      6     0%   1-6
+src/core/metal_utils.py                            11     11     0%   1-19
+src/core/mps_config.py                             10     10     0%   1-17
+src/core/mps_fix.py                                 3      3     0%   1-3
+src/core/mps_fixed.py                              12     12     0%   1-20
+src/core/numpy_patch.py                             4      4     0%   1-10
+src/core/risk_management.py                        24     12    50%   5, 9, 13, 17, 24-25, 29-31, 35, 50-51
+src/core/rl_allocation.py                          15     12    20%   8-26
+src/core/technical/__init__.py                      3      3     0%   1-3
+src/core/technical/indicators.py                    8      8     0%   1-9
+src/core/technical/interface.py                     7      7     0%   1-12
+src/core/technical/technical_analyzer.py           21     21     0%   1-32
+src/data/__init__.py                                0      0   100%
+src/data/data_collector.py                          9      9     0%   1-11
+src/data/feeds.py                                   0      0   100%
+src/data/historical/__init__.py                     0      0   100%
+src/data/preprocessor.py                            4      4     0%   1-7
+src/data/stream/__init__.py                         0      0   100%
+src/data/stream_manager.py                         13     13     0%   2-21
+src/data/stream_manager_fixed.py                   20     20     0%   1-27
+src/data/stream_optimizer.py                       16     16     0%   1-27
+src/data/websocket_client.py                       15     15     0%   1-19
+src/data/websocket_manager.py                      25     25     0%   1-34
+src/execution/__init__.py                           0      0   100%
+src/execution/smart_router.py                       6      6     0%   1-9
+src/main.py                                        10     10     0%   1-15
+src/models/__init__.py                              0      0   100%
+src/models/ai_engine.py                             8      8     0%   1-12
+src/monitoring/__init__.py                          0      0   100%
+src/notifications/__init__.py                       0      0   100%
+src/notifications/telegram.py                      20     20     0%   4-46
+src/optimization/__init__.py                        2      2     0%   1-2
+src/optimization/optuna_wrapper.py                 21     21     0%   1-34
+src/realtime.py                                    47     47     0%   5-86
+src/realtime_bot.py                                52     52     0%   1-86
+src/risk/__init__.py                                0      0   100%
+src/risk/advanced_management.py                     1      1     0%   1
+src/risk/manager.py                                 8      8     0%   1-12
+src/utils/__init__.py                               0      0   100%
+src/utils/helpers.py                                3      3     0%   1-4
+src/utils/torch_bypass.py                          10     10     0%   1-15
+src/utils/torch_compat.py                          14     14     0%   1-20
+src/utils/torch_disable.py                          6      6     0%   1-8
+src/utils/torch_fix.py                             15     15     0%   1-22
+src/utils/torch_hybrid.py                          16     16     0%   1-23
+src/utils/torch_monkeypatch.py                     11     11     0%   1-14
+src/utils/torch_patch.py                           14     14     0%   1-24
+src/utils/torch_safety.py                          10     10     0%   1-14
+src/visualization/__init__.py                       2      0   100%
+src/visualization/dashboard.py                     10      2    80%   13-15
+-----------------------------------------------------------------------------
+TOTAL                                            1284   1091    15%
+Coverage HTML written to dir htmlcov
+
+=========================== short test summary info ============================
+ERROR tests/unit/ai/test_ai_optimization.py
+ERROR tests/unit/core/test_model.py - AttributeError: 'BaseModel' object has ...
+ERROR tests/unit/test_ai_full_DISABLED.py
+ERROR tests/unit/test_ai_modules_DISABLED.py
+ERROR tests/unit/test_ai_optimization_DISABLED.py
+ERROR tests/unit/test_import.py - AttributeError: 'HybridAIEnhanced' object h...
+ERROR tests/unit/test_imports.py
+ERROR tests/unit/test_model.py - AttributeError: 'BaseModel' object has no at...
+ERROR tests/unit/test_sentiment_adjustment.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 9 errors during collection !!!!!!!!!!!!!!!!!!!!
+==================== 89 tests collected, 9 errors in 47.27s ====================

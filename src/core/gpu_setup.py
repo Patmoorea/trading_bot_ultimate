@@ -1,6 +1,7 @@
 import tensorflow as tf
 import os
 
+
 def init_gpu():
     os.environ['TF_METAL_ENABLED'] = '1'
     gpus = tf.config.list_physical_devices('GPU')
@@ -14,5 +15,6 @@ def init_gpu():
         except RuntimeError as e:
             print(f"GPU Config Error: {e}")
     return False
+
 
 GPU_AVAILABLE = init_gpu()

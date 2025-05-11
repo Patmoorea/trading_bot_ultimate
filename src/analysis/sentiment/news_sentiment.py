@@ -4,6 +4,7 @@ Analyse de sentiment simplifiée sans dépendance lourde
 import requests
 from config import Config
 
+
 class NewsSentimentAnalyzer:
     def __init__(self):
         if not Config.NEWS_API_KEY:
@@ -31,7 +32,7 @@ class NewsSentimentAnalyzer:
         """Analyse de sentiment simplifiée basée sur des mots-clés"""
         positive_words = ['bullish', 'rise', 'gain', 'up', 'positive']
         negative_words = ['bearish', 'fall', 'drop', 'down', 'negative']
-        
+
         score = 0
         text_lower = text.lower()
         for word in positive_words:
@@ -40,16 +41,16 @@ class NewsSentimentAnalyzer:
         for word in negative_words:
             if word in text_lower:
                 score -= 0.2
-                
+
         return max(-1.0, min(1.0, score))
 
     def get_market_sentiment(self):
         articles = self.fetch_news()
         if not articles:
             return 0.0
-            
+
         total_score = 0.0
         for article in articles:
             total_score += self.analyze_sentiment(article)
-        
+
         return total_score / len(articles)

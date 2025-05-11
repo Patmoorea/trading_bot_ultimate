@@ -1,13 +1,9 @@
-from binance.spot import Spot
-import numpy as np
-
-class SmartOrderRouter:
-    def __init__(self, client):
-        self.client = client
-        
-    def get_optimal_price(self, symbol, side, amount):
-        ob = self.client.depth(symbol)
-        if side == 'BUY':
-            return np.min([x[0] for x in ob['asks'][:3]])
-        else:
-            return np.max([x[0] for x in ob['bids'][:3]])
+class SmartRouter:
+    """Version simplifiée sans dépendance Binance"""
+    def __init__(self, config):
+        self.config = config
+        self.exchanges = {}  # Dictionnaire pour gérer différents exchanges
+    
+    def add_exchange(self, name, adapter):
+        """Ajoute un connecteur d'exchange"""
+        self.exchanges[name] = adapter

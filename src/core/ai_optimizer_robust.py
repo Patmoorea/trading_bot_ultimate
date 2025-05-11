@@ -3,10 +3,11 @@ import optuna
 from tensorflow.keras.optimizers import Adam
 from core.gpu_config import configure_gpu
 
+
 def run_optimization(model, X_train, y_train, X_val, y_val, n_trials=5):
     """Version robuste de l'optimisation"""
     configure_gpu()  # Réapplique la configuration
-    
+
     def objective(trial):
         try:
             lr = trial.suggest_float('lr', 1e-5, 1e-3, log=True)

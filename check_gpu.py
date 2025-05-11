@@ -1,4 +1,3 @@
 import tensorflow as tf
-print("=== Vérification Conda ===")
-print(f"TensorFlow: {tf.__version__}")
-print(f"GPU détectés: {tf.config.list_physical_devices('GPU')}")
+print("GPU disponibles:", tf.config.list_physical_devices('GPU'))
+print("Built with Metal:", tf.test.is_built_with_metal_support())
