@@ -40,3 +40,4 @@ trading_bot_temp/
 # Environnements virtuels
 .venv/
 venv*/
+.DS_Store
