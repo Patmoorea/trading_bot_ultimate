@@ -30,3 +30,13 @@ analysis_files.zip
 .env
 .env.*
 secrets.*
+
+# Dossiers à toujours ignorer
+trading_bot/
+trading_bot_backup/
+trading_bot_OLD/
+trading_bot_temp/
+
+# Environnements virtuels
+.venv/
+venv*/
