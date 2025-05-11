@@ -1,29 +1,32 @@
-# Environnement
-.venv/
-venv*/
-.env
-.env*
-
-# Fichiers Python
-__pycache__/
-*.py[cod]
-*.so
-*.pyd
-
-# Packages
-lib/
-include/
-share/
-bin/
-
-# Données et logs
-data/
-logs/
-*.log
-*.data
-*.prof
-
-# Système
+# Fichiers système
 .DS_Store
 *.swp
 *.bak
+
+# Environnement Python
+.venv/
+venv*/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Fichiers de données et logs
+/logs/
+*.log
+*.data
+*.prof
+*.csv
+
+# Dossiers inutiles
+archive/
+.benchmarks/
+.coverage
+analysis_files.zip
+*.prof
+
+# Fichiers sensibles
+.env
+.env.*
+secrets.*
