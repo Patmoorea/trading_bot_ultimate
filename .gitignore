@@ -41,3 +41,16 @@ trading_bot_temp/
 .venv/
 venv*/
 .DS_Store
+# Fichiers temporaires
+*.backup*
+*.new
+*_save.*
+*_save_*
+
+# Fichiers de debug
+debug_*
+test_*.py
+quick_*.py
+
+# Configurations locales
+save_*.yaml
