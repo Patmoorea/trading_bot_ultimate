@@ -1,13 +1,15 @@
-import unittest
-from src.arbitrage.cross_exchange import ArbitrageEngine
+from src.strategies.arbitrage.arbitrage_enhanced import EnhancedArbitrage
 
-class TestArbitrage(unittest.TestCase):
-    def setUp(self):
-        self.engine = ArbitrageEngine()
-    
-    def test_opportunities(self):
-        res = self.engine.find_opportunities('BTC/USDT')
-        self.assertIsInstance(res, list)
+arb = EnhancedArbitrage()
+print("=== TEST ARBITRAGE ===")
 
-if __name__ == '__main__':
-    unittest.main()
+try:
+    spread = arb.check_opportunity()
+    if spread:
+        print(f"\033[92mOpportunité détectée: {spread:.4f}%\033[0m")
+    else:
+        current_spread = (arb.exchange.fetch_order_book('BTC/USDC')['bids'][0][0] / 
+                         arb.exchange.fetch_order_book('BTC/USDT')['asks'][0][0] - 1) * 100
+        print(f"\033[33mSpread actuel: {current_spread:.4f}% (seuil: {arb.threshold}%)\033[0m")
+except Exception as e:
+    print(f"\033[91mERREUR: {str(e)}\033[0m")
