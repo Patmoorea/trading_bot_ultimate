@@ -1,6 +1,10 @@
 import os
 import requests
 from dotenv import load_dotenv
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
@@ -8,23 +12,68 @@ class TelegramNotifier:
     def __init__(self):
         self.token = os.getenv('TELEGRAM_BOT_TOKEN')
         self.chat_id = os.getenv('TELEGRAM_CHAT_ID')
+        if not self.token:
+            logger.error("Token Telegram non configuré!")
+        if not self.chat_id:
+            logger.error("Chat ID Telegram non configuré!")
         
-    def send(self, message):
-        if not all([self.token, self.chat_id]):
-            print("Configuration Telegram manquante dans .env")
+    def send(self, message: str) -> bool:
+        if not self.token or not self.chat_id:
+            logger.warning("Configuration Telegram incomplète")
             return False
             
         url = f"https://api.telegram.org/bot{self.token}/sendMessage"
         payload = {
-            'chat_id': self.chat_id,
-            'text': message,
-            'parse_mode': 'HTML'
+            "chat_id": self.chat_id,
+            "text": message,
+            "parse_mode": "Markdown"
         }
+        
         try:
-            requests.post(url, data=payload)
-            return True
+            response = requests.post(url, json=payload, timeout=10)
+            logger.info(f"Réponse Telegram: {response.status_code} - {response.text}")
+            return response.status_code == 200
         except Exception as e:
-            print(f"Erreur d'envoi Telegram: {str(e)}")
+            logger.error(f"Erreur d'envoi Telegram: {e}")
             return False
 
-notifier = TelegramNotifier()
+    def validate_credentials(self) -> bool:
+        """Vérifie que le token et chat ID sont valides"""
+        if not self.token or not self.chat_id:
+            return False
+        try:
+            url = f"https://api.telegram.org/bot{self.token}/getChat"
+            response = requests.post(url, json={"chat_id": self.chat_id})
+            return response.json().get('ok', False)
+        except Exception:
+            return False
+
+class TelegramNotifierOptimized(TelegramNotifier):
+    """Version optimisée avec session HTTP persistante"""
+    def __init__(self):
+        super().__init__()
+        self.session = requests.Session()  # Session HTTP réutilisable
+        self.session.headers.update({'Connection': 'keep-alive'})
+        
+    def send(self, message: str) -> bool:
+        if not self.token or not self.chat_id:
+            logger.warning("Configuration Telegram incomplète")
+            return False
+            
+        url = f"https://api.telegram.org/bot{self.token}/sendMessage"
+        payload = {
+            "chat_id": self.chat_id,
+            "text": message,
+            "parse_mode": "Markdown"
+        }
+        
+        try:
+            response = self.session.post(url, json=payload, timeout=10)
+            logger.info(f"Réponse Telegram (optimisée): {response.status_code}")
+            return response.status_code == 200
+        except Exception as e:
+            logger.error(f"Erreur d'envoi (optimisé): {e}")
+            return False
+
+# Alias pour compatibilité ascendante
+TelegramNotifier = TelegramNotifierOptimized
