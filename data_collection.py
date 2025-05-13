@@ -20,3 +20,12 @@ def init_additional_websockets():
     for pair in additional_pairs_usdc:
         ws = BinanceWebSocket(pair)
         ws.start()
+# Nouvelle fonctionnalité: Buffer circulaire
+class CircularBuffer:
+    def __init__(self, size):
+        self.buffer = np.zeros(size)
+        self.index = 0
+
+    def add_data(self, data):
+        self.buffer[self.index] = data
+        self.index = (self.index + 1) % len(self.buffer)

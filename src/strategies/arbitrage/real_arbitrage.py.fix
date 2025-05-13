@@ -1,0 +1,5 @@
+# Ajoutez cette vérification dans la méthode scan_all_pairs()
+if isinstance(bid, (int, float)) and isinstance(ask, (int, float)):
+    spread = (ask - bid) / ask
+    if spread > self.min_spread:
+        opportunities[f"{name}:{symbol}"] = spread

@@ -1,56 +1,47 @@
-"""
-Analyse de sentiment simplifiée sans dépendance lourde
-"""
+import os
+import logging
+import time
 import requests
-from config import Config
+import torch
+from dotenv import load_dotenv
+from transformers import pipeline
 
+load_dotenv()
+
+logger = logging.getLogger(__name__)
 
 class NewsSentimentAnalyzer:
     def __init__(self):
-        if not Config.NEWS_API_KEY:
-            raise ValueError("News API key not configured")
+        """Version corrigée pour Apple Silicon"""
+        self.news_api_key = os.getenv('NEWS_API_KEY')
+        self.languages = os.getenv('NEWS_API_LANGUAGES', 'en').split(',')
+        self.sources = os.getenv('NEWS_SOURCES', '').split(',')
+        self.threshold = float(os.getenv('SENTIMENT_THRESHOLD', 0.7))
+        self.refresh_interval = int(os.getenv('NEWS_REFRESH_INTERVAL', 30))
+        self.last_fetch = 0
+        self.cache = []
+        self.sentiment_pipeline = None
 
-    def fetch_news(self):
         try:
-            response = requests.get(
-                "https://newsapi.org/v2/everything",
-                params={
-                    "apiKey": Config.NEWS_API_KEY,
-                    "q": "crypto OR cryptocurrency",
-                    "pageSize": 5,
-                    "language": "en"
-                },
-                timeout=10
+            # Désactiver MPS pour éviter les bugs
+            device = "cpu"
+            self.sentiment_pipeline = pipeline(
+                "sentiment-analysis",
+                model="finiteautomata/bertweet-base-sentiment-analysis",
+                device=device,
+                framework="pt"
             )
-            articles = response.json().get("articles", [])
-            return [a['title'] for a in articles]
         except Exception as e:
-            print(f"Error fetching news: {e}")
-            return []
+            logger.error(f"Erreur pipeline: {str(e)}")
+            self._init_fallback()
 
-    def analyze_sentiment(self, text):
-        """Analyse de sentiment simplifiée basée sur des mots-clés"""
-        positive_words = ['bullish', 'rise', 'gain', 'up', 'positive']
-        negative_words = ['bearish', 'fall', 'drop', 'down', 'negative']
+    def _init_fallback(self):
+        """Initialisation de secours"""
+        try:
+            from textblob import TextBlob
+            self.sentiment_pipeline = "textblob"
+            logger.info("Utilisation de TextBlob comme fallback")
+        except ImportError:
+            logger.error("Aucun analyseur de sentiment disponible")
 
-        score = 0
-        text_lower = text.lower()
-        for word in positive_words:
-            if word in text_lower:
-                score += 0.2
-        for word in negative_words:
-            if word in text_lower:
-                score -= 0.2
-
-        return max(-1.0, min(1.0, score))
-
-    def get_market_sentiment(self):
-        articles = self.fetch_news()
-        if not articles:
-            return 0.0
-
-        total_score = 0.0
-        for article in articles:
-            total_score += self.analyze_sentiment(article)
-
-        return total_score / len(articles)
+    # ... [le reste du code reste identique] ...

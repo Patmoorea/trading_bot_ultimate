@@ -88,3 +88,28 @@ def init_hardware():
     if not check_performance_threshold():
         raise RuntimeError('Vérification matérielle échouée')
     print('✅ Matériel validé')
+
+def init_news_system():
+    from src.analysis.sentiment.news_sentiment import NewsSentimentAnalyzer
+    news_analyzer = NewsSentimentAnalyzer()
+    return news_analyzer
+
+def init_news_system():
+    """
+    Initialise le système d'analyse d'actualités
+    Retourne: (NewsSentimentAnalyzer, bool) - (instance, status_ok)
+    """
+    try:
+        from src.analysis.sentiment.news_sentiment import NewsSentimentAnalyzer
+        analyzer = NewsSentimentAnalyzer()
+        return analyzer, analyzer.sentiment_pipeline is not None
+    except Exception as e:
+        print(f"ERREUR initialisation news: {str(e)}")
+        return None, False
+
+if __name__ == "__main__":
+    news_analyzer, status = init_news_system()
+    if status:
+        print("Système news opérationnel")
+    else:
+        print("Système news en mode dégradé")

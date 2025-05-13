@@ -47,3 +47,14 @@ class EnhancedArbitrage:
             except Exception as e:
                 print(f"\033[91mErreur: {str(e)}\033[0m")
                 time.sleep(30)
+def enhanced_check(self):
+    """Compare avec 3 exchanges (Binance, Gate.io, OKX)"""
+    spreads = []
+    for exchange in [self.exchange, ccxt.gateio(), ccxt.okx()]:
+        try:
+            usdc = exchange.fetch_order_book('BTC/USDC')
+            usdt = exchange.fetch_order_book('BTC/USDT')
+            spreads.append((usdc['bids'][0][0] / usdt['asks'][0][0] - 1) * 100)
+        except:
+            continue
+    return max(spreads) if spreads else None

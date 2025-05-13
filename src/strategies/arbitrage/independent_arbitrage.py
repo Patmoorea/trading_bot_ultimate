@@ -2,7 +2,7 @@ import ccxt
 import os
 from time import sleep
 
-class USDCArbitrage:
+class IndependentUSDCArbitrage:
     def __init__(self):
         self.exchange = ccxt.binance({
             'apiKey': os.getenv('BINANCE_API_KEY'),

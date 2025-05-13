@@ -2,6 +2,10 @@ import os
 import requests
 from dotenv import load_dotenv
 import logging
+from time import perf_counter
+import statistics
+from Crypto.Cipher import AES
+from datetime import datetime
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -74,6 +78,39 @@ class TelegramNotifierOptimized(TelegramNotifier):
         except Exception as e:
             logger.error(f"Erreur d'envoi (optimisé): {e}")
             return False
+
+    def test_latency(self, n_tests: int = 5) -> float:
+        """Mesure la latence moyenne d'envoi"""
+        latencies = []
+        for _ in range(n_tests):
+            start = perf_counter()
+            self.send("Latency test ping")
+            latencies.append((perf_counter() - start) * 1000)
+        return statistics.mean(latencies)
+
+    def test_success_rate(self, n_tests: int = 10) -> float:
+        """Calcule le taux de réussite"""
+        successes = 0
+        for i in range(n_tests):
+            if self.send(f"Success test {i+1}"):
+                successes += 1
+        return (successes / n_tests) * 100
+
+    def send_encrypted(self, msg: str, key: str) -> bool:
+        """Envoi chiffré AES-256"""
+        try:
+            cipher = AES.new(key.encode(), AES.MODE_EAX)
+            ciphertext, tag = cipher.encrypt_and_digest(msg.encode())
+            return self.send(f"ENC:{ciphertext.hex()}:{tag.hex()}")
+        except Exception as e:
+            self.log_error(f"Encryption failed: {str(e)}")
+            return False
+
+    def log_error(self, error_msg: str):
+        """Journalisation des erreurs"""
+        os.makedirs("logs", exist_ok=True)
+        with open("logs/telegram_errors.log", "a") as f:
+            f.write(f"{datetime.now()} - {error_msg}\n")
 
 # Alias pour compatibilité ascendante
 TelegramNotifier = TelegramNotifierOptimized
