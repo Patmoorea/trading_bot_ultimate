@@ -114,7 +114,7 @@ class USDCArbitrage:
             return 0.0
 
 # ============ DÉBUT AJOUT MULTI-BROKER ============
-BROKER_CONFIG = {
+config.brokers_config.BROKER_CONFIG = {
     'binance': {
         'quote_asset': 'USDC',
         'api_key_env': 'BINANCE_API_KEY',
@@ -151,7 +151,7 @@ class MultiBrokerManager:
         self._init_all_brokers()
     
     def _init_all_brokers(self):
-        for broker_name, config in BROKER_CONFIG.items():
+        for broker_name, config in config.brokers_config.BROKER_CONFIG.items():
             self._init_broker(broker_name, config)
     
     def _init_broker(self, broker_name, config):
@@ -179,18 +179,18 @@ class MultiBrokerManager:
 # Ajout à la classe USDCArbitrage existante
 def set_broker(self, broker_name):
     """Change de broker dynamiquement"""
-    if broker_name in BROKER_CONFIG:
+    if broker_name in config.brokers_config.BROKER_CONFIG:
         self.exchange = MultiBrokerManager().brokers.get(broker_name)
-        self.quote_asset = BROKER_CONFIG[broker_name]['quote_asset']
+        self.quote_asset = config.brokers_config.BROKER_CONFIG[broker_name]['quote_asset']
     else:
         raise ValueError(f"Broker {broker_name} non configuré")
 
 def get_available_brokers(self):
     """Liste tous les brokers configurés"""
-    return list(BROKER_CONFIG.keys())
+    return list(config.brokers_config.BROKER_CONFIG.keys())
 
 # ============ AJOUT MULTI-BROKER ============
-BROKER_CONFIG = {
+config.brokers_config.BROKER_CONFIG = {
     'binance': {
         'name': 'binance',
         'quote': 'USDC',
@@ -231,7 +231,7 @@ class MultiBroker:
         self._init_all()
     
     def _init_all(self):
-        for name, config in BROKER_CONFIG.items():
+        for name, config in config.brokers_config.BROKER_CONFIG.items():
             self._init_broker(name, config)
     
     def _init_broker(self, name, config):
@@ -264,7 +264,7 @@ class MultiBroker:
 def set_broker(self, name):
     if name in self.brokers:
         self.exchange = self.brokers[name]
-        self.quote_asset = BROKER_CONFIG[name]['quote']
+        self.quote_asset = config.brokers_config.BROKER_CONFIG[name]['quote']
     else:
         raise ValueError(f"Broker {name} not configured")
 
