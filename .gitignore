@@ -59,3 +59,9 @@ finBERT/
 run_tests_safe.py
 stress_test.py
 *.egg-info/
+
+# Fichiers de packaging Python
+*.egg-info/
+*.egg
+build/
+dist/
