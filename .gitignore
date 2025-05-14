@@ -65,3 +65,9 @@ stress_test.py
 *.egg
 build/
 dist/
+
+# Python packaging
+*.egg-info/
+*.egg
+build/
+dist/
