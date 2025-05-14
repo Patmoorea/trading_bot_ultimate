@@ -54,3 +54,7 @@ quick_*.py
 
 # Configurations locales
 save_*.yaml
+.DS_Store
+finBERT/
+run_tests_safe.py
+stress_test.py
