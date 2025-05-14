@@ -58,3 +58,4 @@ save_*.yaml
 finBERT/
 run_tests_safe.py
 stress_test.py
+*.egg-info/
