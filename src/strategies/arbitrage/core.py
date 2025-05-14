@@ -1,56 +1,39 @@
 """
-Module central d'arbitrage - Version finalement fonctionnelle
+Configuration spécifique pour Blofin sans passphrase
 """
+from dotenv import load_dotenv
+import os
 import ccxt
 import logging
-import time
-import os  # Import manquant ajouté
-from typing import Dict, List, Optional
-from dataclasses import dataclass
 
-@dataclass
-class ArbitrageOpportunity:
-    pair: str
-    spread: float
-    exchange1: str = 'binance'
-    exchange2: str = 'binance'
+load_dotenv(os.path.join(os.path.dirname(__file__), '../../../.env'))
 
-class UnifiedArbitrage:
-    """Version finale avec tous les correctifs"""
-    
-    def __init__(self, config: dict):
-        self.config = config
-        self.logger = logging.getLogger('arbitrage')
-        self.timeout = int(config.get('timeout', 10000))
-        self.min_spread = float(config.get('min_spread', 0.002))
-        self.exchanges = self._init_exchanges(config.get('exchanges', ['binance']))
+class ArbitrageEngine:
+    def __init__(self):
+        self.brokers = {
+            'binance': self._init_exchange('binance'),
+            'okx': self._init_exchange('okx', needs_passphrase=True),
+            'blofin': self._init_blofin(),  # Méthode spéciale
+            'gateio': self._init_exchange('gateio'),
+            'bingx': self._init_exchange('bingx')
+        }
 
-    def _init_exchanges(self, exchange_names: List[str]) -> Dict[str, ccxt.Exchange]:
-        """Initialisation robuste des exchanges"""
-        exchanges = {}
-        for name in exchange_names:
-            try:
-                # Lecture depuis config ou variables d'environnement
-                api_key = self.config.get(f'{name}_api_key') or os.getenv(f'{name.upper()}_API_KEY')
-                api_secret = self.config.get(f'{name}_api_secret') or os.getenv(f'{name.upper()}_API_SECRET')
-                
-                if not api_key or not api_secret:
-                    raise ValueError(f"Clés API manquantes pour {name}")
-                
-                exchange = getattr(ccxt, name)({
-                    'apiKey': api_key,
-                    'secret': api_secret,
-                    'enableRateLimit': True,
-                    'timeout': self.timeout
-                })
-                
-                # Test de connexion
-                exchange.fetch_ticker('BTC/USDT')
-                exchanges[name] = exchange
-                self.logger.info(f"Exchange {name} initialisé avec succès")
-                
-            except Exception as e:
-                self.logger.error(f"Échec initialisation {name}: {str(e)}")
-        return exchanges
+    def _init_blofin(self):
+        """Initialisation spécifique pour Blofin sans passphrase"""
+        try:
+            return ccxt.blofin({
+                'apiKey': os.getenv('BLOFIN_API_KEY'),
+                'secret': os.getenv('BLOFIN_API_SECRET'),
+                'enableRateLimit': True,
+                'options': {
+                    'defaultType': 'spot',
+                    'adjustForTimeDifference': True
+                }
+            })
+        except Exception as e:
+            logging.error(f"Erreur initialisation Blofin: {str(e)}")
+            raise
 
-    # ... [le reste des méthodes reste inchangé] ...
+    def _init_exchange(self, name: str, needs_passphrase: bool = False):
+        """Initialisation standard pour les autres exchanges"""
+        # ... (gardez le reste de la méthode existante)
