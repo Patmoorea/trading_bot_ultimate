@@ -1,5 +1,5 @@
-from .main import ArbitrageBot
-from .service import ArbitrageEngine
+from .main import BotArbitrage
+from .service import MoteurArbitrage
 from .config import PAIRS, SETTINGS
 
-__all__ = ['ArbitrageBot', 'ArbitrageEngine', 'PAIRS', 'SETTINGS']
+__all__ = ['BotArbitrage', 'MoteurArbitrage', 'PAIRS', 'SETTINGS']

@@ -35,7 +35,7 @@ class BotArbitrage:
                             logger.error(f"Échec exécution arbitrage: {str(e)}")
                             continue
                         
-                        await asyncio.sleep(1)  # Pause entre les arbitrages
+                        await asyncio.sleep(1)
                 
             except Exception as e:
                 logger.error(f"Erreur boucle principale: {str(e)}")
