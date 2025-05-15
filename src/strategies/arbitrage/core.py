@@ -1,149 +1,96 @@
-"""
-Configuration spécifique pour Blofin sans passphrase
-"""
-from dotenv import load_dotenv
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import os
-from concurrent.futures import ThreadPoolExecutor
+import logging
 import ccxt
 from concurrent.futures import ThreadPoolExecutor
-import logging
-from concurrent.futures import ThreadPoolExecutor
+from dotenv import load_dotenv
+
+# Chargement des variables d'environnement
 load_dotenv(os.path.join(os.path.dirname(__file__), '../../../.env'))
 
 class ArbitrageEngine:
     def __init__(self):
-        self.brokers = {
-            'binance': self._init_exchange('binance'),
-            'okx': self._init_exchange('okx', needs_passphrase=True),
-            'blofin': self._init_blofin(),  # Méthode spéciale
-            'gateio': self._init_exchange('gateio'),
-            'bingx': self._init_exchange('bingx')
-        }
+        """Initialise le moteur d'arbitrage avec tous les brokers configurés"""
+        self._init_logger()
+        self.brokers = self._init_all_brokers()
+        self.logger.info("ArbitrageEngine initialisé avec succès")
 
-    def _init_blofin(self):
-        """Initialisation spécifique pour Blofin sans passphrase"""
-        try:
-            return ccxt.blofin({
-                'apiKey': os.getenv('BLOFIN_API_KEY'),
-                'secret': os.getenv('BLOFIN_API_SECRET'),
-                'enableRateLimit': True,
-                'options': {
-                    'defaultType': 'spot',
-                    'adjustForTimeDifference': True
+    def _init_logger(self):
+        """Configure le système de logging"""
+        self.logger = logging.getLogger(__name__)
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter(
+            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        )
+        handler.setFormatter(formatter)
+        self.logger.addHandler(handler)
+        self.logger.setLevel(logging.INFO)
+
+    def _init_all_brokers(self):
+        """Initialise tous les brokers avec leurs configurations spécifiques"""
+        brokers_config = {
+            'binance': {
+                'class': ccxt.binance,
+                'params': {
+                    'apiKey': os.getenv('BINANCE_API_KEY'),
+                    'secret': os.getenv('BINANCE_API_SECRET'),
+                    'options': {'defaultType': 'spot'}
                 }
-            })
-        except Exception as e:
-            logging.error(f"Erreur initialisation Blofin: {str(e)}")
-            raise
-
-    def _init_exchange(self, name: str, needs_passphrase: bool = False):
-        """Initialisation standard pour les autres exchanges"""
-        # ... (gardez le reste de la méthode existante)
-
-def check_liquidity(self, pair):
-    """Nouvelle fonction pour éviter le slippage"""
-    binance_depth = self.binance.get_order_book(pair + 'USDC')
-    okx_depth = self.okx.get_order_book(pair + 'USDT')
-    return {
-        'binance': binance_depth['asks'][0][1],
-        'okx': okx_depth['bids'][0][1],
-        'safe_volume': min(binance_depth['asks'][0][1], okx_depth['bids'][0][1]) * 0.9
-    }
-
-def check_liquidity(pair: str) -> dict:
-    """Nouvelle fonction safe pour M4"""
-    with torch.inference_mode():
-        # Implémentation optimisée
-        return {...}
-
-def check_liquidity(pair: str) -> dict:
-    """Nouvelle fonction safe pour M4"""
-    import torch
-    with torch.inference_mode():
-        return {
-            'pair': pair,
-            'status': 'implement_this_logic',
-            'm4_optimized': True
+            },
+            'okx': {
+                'class': ccxt.okx,
+                'params': {
+                    'apiKey': os.getenv('OKX_API_KEY'),
+                    'secret': os.getenv('OKX_API_SECRET'),
+                    'password': os.getenv('OKX_PASSPHRASE')
+                }
+            },
+            'blofin': {
+                'class': ccxt.blofin,
+                'params': {
+                    'apiKey': os.getenv('BLOFIN_API_KEY'),
+                    'secret': os.getenv('BLOFIN_API_SECRET')
+                }
+            },
+            'gateio': {
+                'class': ccxt.gateio,
+                'params': {
+                    'apiKey': os.getenv('GATEIO_API_KEY'),
+                    'secret': os.getenv('GATEIO_API_SECRET')
+                }
+            },
+            'bingx': {
+                'class': ccxt.bingx,
+                'params': {
+                    'apiKey': os.getenv('BINGX_API_KEY'),
+                    'secret': os.getenv('BINGX_API_SECRET')
+                }
+            }
         }
 
-def _init_blofin(self):
-    """Initialisation Blofin optimisée sans passphrase"""
-    try:
-        exchange = ccxt.blofin({
-            'apiKey': os.getenv('BLOFIN_API_KEY'),
-            'secret': os.getenv('BLOFIN_API_SECRET'),
-            'timeout': 30000,
-            'enableRateLimit': True,
-            'options': {
-                'defaultType': 'swap',
-                'fetchMarkets': 'spot',
-                'adjustForTimeDifference': True,
-                'recvWindow': 10000
+        brokers = {}
+        with ThreadPoolExecutor() as executor:
+            futures = {
+                executor.submit(self._init_broker, name, config)
+                for name, config in brokers_config.items()
             }
-        })
-        exchange.load_markets()
-        return exchange
-    except ccxt.AuthenticationError as e:
-        logging.critical(f"Erreur auth Blofin: {e}")
-        raise
-    except ccxt.NetworkError as e:
-        logging.warning(f"Erreur réseau Blofin: {e}")
-        return None
+            for future in futures:
+                name, broker = future.result()
+                brokers[name] = broker
 
-def check_liquidity(self, pair: str, safe_ratio: float = 0.85) -> dict:
-    """Vérification liquidité optimisée M4"""
-    import torch
-    with torch.inference_mode():
+        return brokers
+
+    def _init_broker(self, name, config):
+        """Initialise un broker individuel avec gestion d'erreur"""
         try:
-            binance_symbol = f"{pair}/USDT"
-            blofin_symbol = f"{pair}/USD"
-            
-            with ThreadPoolExecutor() as executor:
-                future_binance = executor.submit(
-                    self.brokers['binance'].fetch_order_book, 
-                    binance_symbol
-                )
-                future_blofin = executor.submit(
-                    self.brokers['blofin'].fetch_order_book,
-                    blofin_symbol
-                )
-                
-                binance_book = future_binance.result()
-                blofin_book = future_blofin.result()
-                
-            binance_bid = torch.tensor(binance_book['bids'][0][0])
-            binance_ask = torch.tensor(binance_book['asks'][0][0])
-            blofin_bid = torch.tensor(blofin_book['bids'][0][0])
-            blofin_ask = torch.tensor(blofin_book['asks'][0][0])
-            
-            spread = (blofin_bid - binance_ask).item()
-            safe_volume = min(
-                binance_book['asks'][0][1],
-                blofin_book['bids'][0][1]
-            ) * safe_ratio
-            
-            return {
-                'binance': {
-                    'bid': binance_bid.item(),
-                    'ask': binance_ask.item(),
-                    'safe_volume': safe_volume
-                },
-                'blofin': {
-                    'bid': blofin_bid.item(),
-                    'ask': blofin_ask.item(),
-                    'safe_volume': safe_volume
-                },
-                'cross_spread': spread,
-                'm4_optimized': torch.backends.mps.is_available()
-            }
+            broker = config['class'](config['params'])
+            broker.load_markets()
+            self.logger.info(f"Broker {name} initialisé avec succès")
+            return name, broker
         except Exception as e:
-            logging.error(f"Erreur liquidité {pair}: {str(e)}")
-            return {'error': str(e)}
+            self.logger.error(f"Erreur initialisation {name}: {str(e)}")
+            return name, None
 
-def _calculate_spread_m4(self, bids: list, asks: list) -> float:
-    """Calcul optimisé du spread avec M4"""
-    import torch
-    with torch.inference_mode():
-        bids_tensor = torch.tensor([bid[0] for bid in bids])
-        asks_tensor = torch.tensor([ask[0] for ask in asks])
-        return (torch.max(bids_tensor) - torch.min(asks_tensor)).item()
+# Méthodes existantes à conserver...
