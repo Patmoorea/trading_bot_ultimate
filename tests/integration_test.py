@@ -11,11 +11,10 @@ class TestIntegration(unittest.TestCase):
 
     def test_regime_detection(self):
         detector = MarketRegimeDetector()
-        prices = np.array([100.0, 101.0, 102.0, 101.0, 103.0])  # Type explicite
+        prices = np.array([100.0, 101.0, 102.0, 101.0, 103.0, 104.0, 103.0, 105.0, 106.0, 107.0])  # 10 valeurs
         detector.fit(prices)
-        regime = detector.predict(prices)
-        self.assertIn(regime, ["High Volatility Bull", "Low Volatility Bull", 
-                              "High Volatility Bear", "Low Volatility Bear", "Sideways"])
+        regime = detector.predict(prices[-5:])  # Utilise les 5 dernières valeurs
+        self.assertIn(regime, ["Bull", "Bear", "Sideways"])
 
 if __name__ == "__main__":
     unittest.main()
