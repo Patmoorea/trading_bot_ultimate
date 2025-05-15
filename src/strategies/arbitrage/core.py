@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 import os
 from concurrent.futures import ThreadPoolExecutor
 import ccxt
-from concurrent.futures import ThreadPoolExecutorimport logging
+from concurrent.futures import ThreadPoolExecutor
+import logging
 from concurrent.futures import ThreadPoolExecutor
 load_dotenv(os.path.join(os.path.dirname(__file__), '../../../.env'))
 
