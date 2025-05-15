@@ -1,38 +1,40 @@
 import os
+from decimal import Decimal
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# Configuration des paires depuis .env
-TRADING_PAIRS = os.getenv('TRADING_PAIRS', 'BTC,ETH,SOL,ADA,MATIC,AVAX,LTC,DOGE').split(',')
-
+# Configuration des paires SPOT (corrigée)
 PAIRS = {
-    symbol: {
-        'binance': f'{symbol}/USDC',
-        'gateio': f'{symbol}/USDT',
-        'bingx': f'{symbol}/USDT',
-        'okx': f'{symbol}/USDT',
-        'blofin': f'{symbol}/USDT'
+    'BTC': {
+        'binance': 'BTC/USDC',
+        'gateio': 'BTC_USDT',  # Format correct pour Gate.io
+        'bingx': 'BTC-USDT',   # Format correct pour BingX
+        'okx': 'BTC/USDT',     # Format correct pour OKX
+        'blofin': 'BTC-USDT'   # Format correct pour Blofin
+    },
+    'ETH': {
+        'binance': 'ETH/USDC',
+        'gateio': 'ETH_USDT',
+        'bingx': 'ETH-USDT',
+        'okx': 'ETH/USDT',
+        'blofin': 'ETH-USDT'
     }
-    for symbol in TRADING_PAIRS
 }
 
-# Paramètres de risque depuis .env
 SETTINGS = {
-    'profit_threshold': 0.003,  # 0.3%
-    'max_order_value': float(os.getenv('MAX_POSITION', '0.15')) * 1000,  # 15% du capital
-    'min_liquidity': 5000,      # USD
-    'fee_adjustment': 1.2,      # Marge de sécurité
-    'price_expiry': 5,          # Secondes
-    'max_slippage': float(os.getenv('TRAILING_OFFSET', '0.01')),
-    'stop_loss': float(os.getenv('STOP_LOSS', '0.05')),
-    'take_profit': float(os.getenv('TAKE_PROFIT', '0.15'))
+    'profit_threshold': Decimal('0.01'),  # Seuil à 1% pour plus de résultats
+    'max_order_value': Decimal('500'),    # Montant réduit pour tests
+    'min_liquidity': Decimal('1000'),     # Seuil de liquidité réduit
+    'fee_adjustment': Decimal('1.5'),     # Marge de sécurité augmentée
+    'price_expiry': 10,                   # Intervalle augmenté
+    'max_slippage': Decimal('0.01')       # Slippage augmenté
 }
 
 FEES = {
-    'binance': {'maker': 0.001, 'taker': 0.001},
-    'gateio': {'maker': 0.002, 'taker': 0.002},
-    'bingx': {'maker': 0.0015, 'taker': 0.0015},
-    'okx': {'maker': 0.0008, 'taker': 0.001},
-    'blofin': {'maker': 0.0005, 'taker': 0.001}
+    'binance': {'maker': Decimal('0.001'), 'taker': Decimal('0.001')},
+    'gateio': {'maker': Decimal('0.002'), 'taker': Decimal('0.002')},
+    'bingx': {'maker': Decimal('0.0002'), 'taker': Decimal('0.0005')},
+    'okx': {'maker': Decimal('0.0002'), 'taker': Decimal('0.0005')},
+    'blofin': {'maker': Decimal('0.0001'), 'taker': Decimal('0.0004')}
 }
