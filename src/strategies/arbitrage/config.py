@@ -1,30 +1,38 @@
-import yaml
-from pathlib import Path
+import os
+from dotenv import load_dotenv
 
-def load_pairs_config(config_path: str = 'config/arbitrage_pairs.yaml'):
-    """
-    Charge la configuration des paires d'arbitrage
-    """
-    config_file = Path(__file__).parent.parent.parent / config_path
-    
-    if not config_file.exists():
-        raise FileNotFoundError(f"Fichier de configuration {config_path} introuvable")
-    
-    with open(config_file, 'r') as f:
-        config = yaml.safe_load(f)
-        
-    return config
+load_dotenv()
 
-# Configuration par défaut
-DEFAULT_PAIRS = {
-    'BTC/USDT': {
-        'exchanges': ['binance', 'ftx', 'kraken'],
-        'min_volume': 0.1,
-        'max_spread': 0.01
-    },
-    'ETH/USDT': {
-        'exchanges': ['binance', 'coinbase', 'kraken'],
-        'min_volume': 1.0,
-        'max_spread': 0.015
+# Configuration des paires depuis .env
+TRADING_PAIRS = os.getenv('TRADING_PAIRS', 'BTC,ETH,SOL,ADA,MATIC,AVAX,LTC,DOGE').split(',')
+
+PAIRS = {
+    symbol: {
+        'binance': f'{symbol}/USDC',
+        'gateio': f'{symbol}/USDT',
+        'bingx': f'{symbol}/USDT',
+        'okx': f'{symbol}/USDT',
+        'blofin': f'{symbol}/USDT'
     }
+    for symbol in TRADING_PAIRS
+}
+
+# Paramètres de risque depuis .env
+SETTINGS = {
+    'profit_threshold': 0.003,  # 0.3%
+    'max_order_value': float(os.getenv('MAX_POSITION', '0.15')) * 1000,  # 15% du capital
+    'min_liquidity': 5000,      # USD
+    'fee_adjustment': 1.2,      # Marge de sécurité
+    'price_expiry': 5,          # Secondes
+    'max_slippage': float(os.getenv('TRAILING_OFFSET', '0.01')),
+    'stop_loss': float(os.getenv('STOP_LOSS', '0.05')),
+    'take_profit': float(os.getenv('TAKE_PROFIT', '0.15'))
+}
+
+FEES = {
+    'binance': {'maker': 0.001, 'taker': 0.001},
+    'gateio': {'maker': 0.002, 'taker': 0.002},
+    'bingx': {'maker': 0.0015, 'taker': 0.0015},
+    'okx': {'maker': 0.0008, 'taker': 0.001},
+    'blofin': {'maker': 0.0005, 'taker': 0.001}
 }

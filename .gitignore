@@ -71,3 +71,6 @@ dist/
 *.egg
 build/
 dist/
+*.log
+*.csv
+temp/

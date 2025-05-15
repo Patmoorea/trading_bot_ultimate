@@ -6,3 +6,6 @@
 - `tests/performance/` : Benchmarks
 
 Les anciens tests dans la racine sont maintenus pour compatibilité.
+## Nouvelle Structure
+- src/experimental/ pour les features en développement
+- src/strategies/arbitrage/ organisé en sous-modules

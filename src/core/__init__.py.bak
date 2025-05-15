@@ -1,2 +1,0 @@
-from .gpu_setup import GPU_AVAILABLE
-__all__ = ['GPU_AVAILABLE']

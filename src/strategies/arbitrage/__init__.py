@@ -1,8 +1,5 @@
-"""
-Module d'arbitrage crypto multi-exchange
-"""
-from .core import ArbitrageEngine
-from .config import load_pairs_config
-from .execution import ArbitrageExecutor
+from .main import ArbitrageBot
+from .service import ArbitrageEngine
+from .config import PAIRS, SETTINGS
 
-__all__ = ['ArbitrageEngine', 'load_pairs_config', 'ArbitrageExecutor']
+__all__ = ['ArbitrageBot', 'ArbitrageEngine', 'PAIRS', 'SETTINGS']
