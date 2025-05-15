@@ -4,31 +4,37 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Configuration des paires SPOT (corrigée)
 PAIRS = {
     'BTC': {
-        'binance': 'BTC/USDC',
-        'gateio': 'BTC_USDT',  # Format correct pour Gate.io
-        'bingx': 'BTC-USDT',   # Format correct pour BingX
-        'okx': 'BTC/USDT',     # Format correct pour OKX
-        'blofin': 'BTC-USDT'   # Format correct pour Blofin
+        'binance': 'BTC/USDT',
+        'gateio': 'BTC_USDT',
+        'bingx': 'BTC-USDT',
+        'okx': 'BTC/USDT:USDT',
+        'blofin': 'BTC-USDT'
     },
     'ETH': {
-        'binance': 'ETH/USDC',
+        'binance': 'ETH/USDT',
         'gateio': 'ETH_USDT',
         'bingx': 'ETH-USDT',
-        'okx': 'ETH/USDT',
+        'okx': 'ETH/USDT:USDT',
         'blofin': 'ETH-USDT'
+    },
+    'SOL': {
+        'binance': 'SOL/USDT',
+        'gateio': 'SOL_USDT',
+        'bingx': 'SOL-USDT',
+        'okx': 'SOL/USDT:USDT',
+        'blofin': 'SOL-USDT'
     }
 }
 
 SETTINGS = {
-    'profit_threshold': Decimal('0.01'),  # Seuil à 1% pour plus de résultats
-    'max_order_value': Decimal('500'),    # Montant réduit pour tests
-    'min_liquidity': Decimal('1000'),     # Seuil de liquidité réduit
-    'fee_adjustment': Decimal('1.5'),     # Marge de sécurité augmentée
-    'price_expiry': 10,                   # Intervalle augmenté
-    'max_slippage': Decimal('0.01')       # Slippage augmenté
+    'profit_threshold': Decimal('0.005'),
+    'max_order_value': Decimal('100'),
+    'min_liquidity': Decimal('1000'),
+    'fee_adjustment': Decimal('1.3'),
+    'price_expiry': 5,
+    'max_slippage': Decimal('0.008')
 }
 
 FEES = {

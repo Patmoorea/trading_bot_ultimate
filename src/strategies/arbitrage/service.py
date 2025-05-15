@@ -1,6 +1,6 @@
 import os
 import asyncio
-from decimal import Decimal, getcontext
+from decimal import Decimal, getcontext  # Ajout de l'import Decimal
 import time
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
@@ -50,64 +50,61 @@ class ExchangeManager:
             }),
             'blofin': BlofinConnector()
         }
-    
+
     async def get_order_book(self, exchange: str, symbol: str) -> Tuple[Decimal, Decimal]:
         try:
-            if exchange == 'binance' or exchange == 'blofin':
+            if exchange in ['binance', 'blofin']:
                 return await self.exchanges[exchange].get_order_book(symbol)
-            else:
-                orderbook = await self.exchanges[exchange].fetch_order_book(symbol)
-                bid_price = Decimal(str(orderbook['bids'][0][0])) if len(orderbook['bids']) > 0 else Decimal(0)
-                ask_price = Decimal(str(orderbook['asks'][0][0])) if len(orderbook['asks']) > 0 else Decimal('Infinity')
-                return bid_price, ask_price
+            
+            orderbook = await self.exchanges[exchange].fetch_order_book(symbol)
+            bid = Decimal(str(orderbook['bids'][0][0])) if len(orderbook['bids']) > 0 else Decimal(0)
+            ask = Decimal(str(orderbook['asks'][0][0])) if len(orderbook['asks']) > 0 else Decimal('Infinity')
+            return bid, ask
+            
         except Exception as e:
-            logger.warning(f"Échec carnet {exchange} {symbol}: {str(e)}")
+            logger.error(f"Failed to fetch {symbol} from {exchange}: {str(e)}")
             return Decimal(0), Decimal('Infinity')
 
 class ArbitrageEngine:
     def __init__(self):
         self.exchange_manager = ExchangeManager()
-    
+        self.active_orders = {}
+
     async def scan_opportunities(self) -> List[ArbitrageOpportunity]:
         opportunities = []
         
         for symbol in PAIRS:
             prices = {}
-            valid_exchanges = []
             
-            # Récupération des prix
             for exchange, pair in PAIRS[symbol].items():
                 bid, ask = await self.exchange_manager.get_order_book(exchange, pair)
                 if bid > 0 and ask < Decimal('Infinity'):
                     prices[exchange] = (bid, ask)
-                    valid_exchanges.append(exchange)
-            
-            if len(valid_exchanges) < 2:
+                    logger.debug(f"{symbol} prices on {exchange}: bid={bid:.8f}, ask={ask:.8f}")
+
+            if len(prices) < 2:
                 continue
-                
-            # Calcul des meilleurs prix
-            best_bid = max(((ex, data[0]) for ex, data in prices.items()), key=lambda x: x[1])
-            best_ask = min(((ex, data[1]) for ex, data in prices.items()), key=lambda x: x[1])
-            
-            if best_bid[0] != best_ask[0]:
-                # Calcul du profit après frais
-                sell_fee = FEES[best_bid[0]]['taker']
-                buy_fee = FEES[best_ask[0]]['taker']
-                effective_bid = best_bid[1] * (Decimal(1) - sell_fee)
-                effective_ask = best_ask[1] * (Decimal(1) + buy_fee)
-                
+
+            best_bid_exchange, (best_bid, _) = max(prices.items(), key=lambda x: x[1][0])
+            best_ask_exchange, (_, best_ask) = min(prices.items(), key=lambda x: x[1][1])
+
+            if best_bid_exchange != best_ask_exchange:
+                effective_bid = best_bid * (1 - FEES[best_bid_exchange]['taker'])
+                effective_ask = best_ask * (1 + FEES[best_ask_exchange]['taker'])
                 profit = (effective_bid - effective_ask) / effective_ask
-                
+
                 if profit >= SETTINGS['profit_threshold']:
-                    volume = min(SETTINGS['max_order_value'] / effective_ask, 
-                                Decimal('0.1'))  # Limite à 0.1 BTC/ETH pour les tests
+                    volume = min(
+                        SETTINGS['max_order_value'] / best_ask,
+                        Decimal('1')  # Max 1 unit of asset for safety
+                    )
                     opportunities.append(
                         ArbitrageOpportunity(
                             symbol=symbol,
-                            buy_exchange=best_ask[0],
-                            sell_exchange=best_bid[0],
-                            buy_price=best_ask[1],
-                            sell_price=best_bid[1],
+                            buy_exchange=best_ask_exchange,
+                            sell_exchange=best_bid_exchange,
+                            buy_price=best_ask,
+                            sell_price=best_bid,
                             volume=volume,
                             profit=profit,
                             timestamp=time.time()
@@ -115,3 +112,7 @@ class ArbitrageEngine:
                     )
         
         return opportunities
+
+    async def close(self):
+        """Close all exchange connections"""
+        await self.exchange_manager.close()
