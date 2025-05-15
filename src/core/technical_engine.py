@@ -12,7 +12,11 @@ class TechnicalEngine:
             return np.array([x for x in data if isinstance(x, (int, float))], dtype=np.float32)
         return np.array([], dtype=np.float32)
     
-    def compute(self, data):
+    def compute(self, market_data):
+        '''Analyse les données marché réelles
+        Args:
+            market_data: DataFrame avec colonnes ['timestamp', 'open', 'high', 'low', 'close', 'volume']
+        '''
         try:
             clean_data = self._clean_data(data)
             if len(clean_data) == 0:

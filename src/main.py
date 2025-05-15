@@ -1,80 +1,49 @@
-from dotenv import load_dotenvnload_dotenv()nconfig = {"NEWS": {"enabled": False, "TELEGRAM_TOKEN": os.getenv("TELEGRAM_TOKEN")}}
-config = {"NEWS": {"enabled": False}}
+import os
 import logging
-import time
-import pandas as pd
-from src.core.engine import TradingEngine
-from src.core.technical_engine import TechnicalEngine
+from dotenv import load_dotenv
+from core.technical_engine import TechnicalEngine
+from core.risk_manager import RiskManager
 
-# Configuration du logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('trading_bot.log'),
-        logging.StreamHandler()
-    ]
-)
-logger = logging.getLogger(__name__)
+# Chargement de la configuration
+load_dotenv()
+config = {
+    "NEWS": {
+        "enabled": True,
+        "TELEGRAM_TOKEN": os.getenv("TELEGRAM_TOKEN", "")
+    }
+}
 
-def safe_analyze(tech_engine, data):
-    """Version sécurisée de l'analyse technique"""
-    try:
-        return tech_engine.compute(data)
-    except Exception as e:
-        logger.error(f"Erreur d'analyse: {str(e)}")
-        return {}
+def init_logging():
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
 
 def main():
+    init_logging()
+    logger = logging.getLogger(__name__)
+    
     try:
-        # Initialisation
-        engine = TradingEngine()
-        tech_engine = TechnicalEngine()
+        logger.info("⚡ Initialisation du Trading Bot M4")
+        engine = TechnicalEngine()
+        risk_mgr = RiskManager()
         
-        # Chargement des données
-        logger.info("Chargement des données...")
-        df = engine.load_data('data/historical/btc_usdt_1h_clean.csv')
-        logger.info(f"Données chargées ({len(df)} points)")
+        # Simulation de données
+        test_data = [1.5, 2.3, 3.1, 4.0]
         
-        # Analyse technique
-        while True:
-            window = df.iloc[-100:]  # Dernières 100 bougies
-            analysis = safe_analyze(tech_engine, window)
-            
-            # Affichage des résultats
-            if analysis.get('momentum', {}).get('rsi') is not None:
-                logger.info(f"RSI: {analysis['momentum']['rsi'].iloc[-1]:.2f}")
-            
-            if analysis.get('volatility', {}).get('bbands_BBU_20_2.0') is not None:
-                logger.info("Bollinger Bands:")
-                logger.info(f"  Upper: {analysis['volatility']['bbands_BBU_20_2.0'].iloc[-1]:.2f}")
-                logger.info(f"  Middle: {analysis['volatility']['bbands_BBM_20_2.0'].iloc[-1]:.2f}")
-                logger.info(f"  Lower: {analysis['volatility']['bbands_BBL_20_2.0'].iloc[-1]:.2f}")
-            
-            time.sleep(1)
-            
+        logger.info("Analyse des données...")
+        signal = engine.compute(test_data)
+        risk_assessment = risk_mgr.evaluate_risk(signal)
+        
+        logger.info(f"Signal: {signal}")
+        logger.info(f"Évaluation du risque: {risk_assessment}")
+        
     except KeyboardInterrupt:
         logger.info("Arrêt manuel demandé")
     except Exception as e:
-        logger.error(f"Erreur critique: {str(e)}", exc_info=True)
+        logger.error(f"Erreur critique: {e}")
     finally:
         logger.info("Bot arrêté")
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
-
-# Initialisation du module news
-try:
-    from src.modules.news.start_service import start_news_monitoring
-    news_monitor = start_news_monitoring(config['NEWS'])
-except ImportError as e:
-    print(f"News module not available: {e}")
-
-# Initialisation du module News
-try:
-    from src.modules.news import EnhancedNewsProcessor
-    print("Initializing News Monitoring System...")
-    news_processor = EnhancedNewsProcessor()
-    print("Active components:", news_processor.check_components())
-except Exception as e:
-    print(f"News module initialization failed: {e}")

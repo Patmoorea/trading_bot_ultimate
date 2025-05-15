@@ -1,0 +1,11 @@
+@@ -59,7 +59,7 @@
+ 
+     def get_opportunities(self):
+         return [
+-            (pair, spread) 
+-            for pair, spread in self.scan_all_pairs().items()
+-            if spread > self.min_spread
++            (pair, spread)
++            for pair, spread in self.scan_all_pairs().items()
++            if spread > self.min_spread
+         ]
