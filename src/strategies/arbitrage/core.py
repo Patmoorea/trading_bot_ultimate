@@ -1,96 +1,48 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+import numpy as np
+from typing import Dict, List
+from dataclasses import dataclass
+from ..base import BaseStrategy
 
-import os
-import logging
-import ccxt
-from concurrent.futures import ThreadPoolExecutor
-from dotenv import load_dotenv
+@dataclass
+class ArbitrageOpportunity:
+    pair: str
+    exchange_a: str
+    exchange_b: str
+    spread: float
+    volume: float
+    timestamp: float
 
-# Chargement des variables d'environnement
-load_dotenv(os.path.join(os.path.dirname(__file__), '../../../.env'))
-
-class ArbitrageEngine:
-    def __init__(self):
-        """Initialise le moteur d'arbitrage avec tous les brokers configurés"""
-        self._init_logger()
-        self.brokers = self._init_all_brokers()
-        self.logger.info("ArbitrageEngine initialisé avec succès")
-
-    def _init_logger(self):
-        """Configure le système de logging"""
-        self.logger = logging.getLogger(__name__)
-        handler = logging.StreamHandler()
-        formatter = logging.Formatter(
-            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
-        handler.setFormatter(formatter)
-        self.logger.addHandler(handler)
-        self.logger.setLevel(logging.INFO)
-
-    def _init_all_brokers(self):
-        """Initialise tous les brokers avec leurs configurations spécifiques"""
-        brokers_config = {
-            'binance': {
-                'class': ccxt.binance,
-                'params': {
-                    'apiKey': os.getenv('BINANCE_API_KEY'),
-                    'secret': os.getenv('BINANCE_API_SECRET'),
-                    'options': {'defaultType': 'spot'}
-                }
-            },
-            'okx': {
-                'class': ccxt.okx,
-                'params': {
-                    'apiKey': os.getenv('OKX_API_KEY'),
-                    'secret': os.getenv('OKX_API_SECRET'),
-                    'password': os.getenv('OKX_PASSPHRASE')
-                }
-            },
-            'blofin': {
-                'class': ccxt.blofin,
-                'params': {
-                    'apiKey': os.getenv('BLOFIN_API_KEY'),
-                    'secret': os.getenv('BLOFIN_API_SECRET')
-                }
-            },
-            'gateio': {
-                'class': ccxt.gateio,
-                'params': {
-                    'apiKey': os.getenv('GATEIO_API_KEY'),
-                    'secret': os.getenv('GATEIO_API_SECRET')
-                }
-            },
-            'bingx': {
-                'class': ccxt.bingx,
-                'params': {
-                    'apiKey': os.getenv('BINGX_API_KEY'),
-                    'secret': os.getenv('BINGX_API_SECRET')
-                }
-            }
-        }
-
-        brokers = {}
-        with ThreadPoolExecutor() as executor:
-            futures = {
-                executor.submit(self._init_broker, name, config)
-                for name, config in brokers_config.items()
-            }
-            for future in futures:
-                name, broker = future.result()
-                brokers[name] = broker
-
-        return brokers
-
-    def _init_broker(self, name, config):
-        """Initialise un broker individuel avec gestion d'erreur"""
-        try:
-            broker = config['class'](config['params'])
-            broker.load_markets()
-            self.logger.info(f"Broker {name} initialisé avec succès")
-            return name, broker
-        except Exception as e:
-            self.logger.error(f"Erreur initialisation {name}: {str(e)}")
-            return name, None
-
-# Méthodes existantes à conserver...
+class ArbitrageEngine(BaseStrategy):
+    def __init__(self, config: Dict):
+        super().__init__()
+        self.min_spread = config.get('min_spread', 0.005)  # 0.5%
+        self.max_volume = config.get('max_volume', 10.0)  # 10 BTC
+        
+    def find_opportunities(self, orderbooks: Dict) -> List[ArbitrageOpportunity]:
+        """
+        Détecte les opportunités d'arbitrage entre exchanges
+        """
+        opportunities = []
+        
+        for pair, books in orderbooks.items():
+            for exchange_a, book_a in books.items():
+                for exchange_b, book_b in books.items():
+                    if exchange_a != exchange_b:
+                        bid_a = book_a['bids'][0][0]
+                        ask_b = book_b['asks'][0][0]
+                        
+                        spread = (bid_a - ask_b) / ask_b
+                        
+                        if spread > self.min_spread:
+                            volume = min(book_a['bids'][0][1], book_b['asks'][0][1])
+                            if volume >= self.max_volume:
+                                opp = ArbitrageOpportunity(
+                                    pair=pair,
+                                    exchange_a=exchange_a,
+                                    exchange_b=exchange_b,
+                                    spread=spread,
+                                    volume=volume,
+                                    timestamp=time.time()
+                                )
+                                opportunities.append(opp)
+        return opportunities
