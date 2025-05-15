@@ -8,7 +8,7 @@ def test_optimization():
     with patch('src.core.ai_optimizer.run_optimization') as mock_optim:
         mock_optim.return_value = {"lr": 0.001, "batch_size": 64}
         
-        from src.core.ai_optimizer import run_optimization
+        from src.core_merged.ai_optimizer import run_optimization
         result = run_optimization(None, None, None, n_trials=5)
         assert isinstance(result, dict)
 
@@ -19,6 +19,6 @@ def test_rl():
     with patch('src.core.rl_allocation.CapitalAllocationEnv') as mock_env:
         mock_env.return_value.observation_space = "mock_space"
         
-        from src.core.rl_allocation import CapitalAllocationEnv
+        from src.core_merged.rl_allocation import CapitalAllocationEnv
         env = CapitalAllocationEnv()
         assert env.observation_space == "mock_space"

@@ -5,6 +5,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 # Exports explicites
-from core.base_model import BaseModel
-from core.ai.hybrid_ai_enhanced import HybridAIEnhanced
+from src.core_merged.base_model import BaseModel
+from src.core_merged.ai.hybrid_ai_enhanced import HybridAIEnhanced
 from analysis.sentiment import NewsSentimentAnalyzer

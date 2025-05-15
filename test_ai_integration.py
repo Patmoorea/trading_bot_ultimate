@@ -5,7 +5,7 @@ sys.path.append(str(Path(__file__).parent))
 
 def test_optimization():
     print("=== Testing Optimization ===")
-    from src.core.ai_optimizer import run_optimization
+    from src.core_merged.ai_optimizer import run_optimization
     # Mock model for testing
     class MockModel:
         def evaluate(self, _): return [0.5]
@@ -15,7 +15,7 @@ def test_optimization():
 
 def test_rl():
     print("\n=== Testing RL ===")
-    from src.core.rl_allocation import CapitalAllocationEnv, train_rl_agent
+    from src.core_merged.rl_allocation import CapitalAllocationEnv, train_rl_agent
     env = CapitalAllocationEnv(n_assets=3)
     model = train_rl_agent(env, timesteps=100)
     print("RL test passed")

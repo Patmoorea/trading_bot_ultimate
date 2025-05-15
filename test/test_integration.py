@@ -2,7 +2,7 @@
 Tests d'intégration
 """
 import pytest
-from src.core.engine import TradingEngine
+from src.core_merged.engine import TradingEngine
 from config import Config
 
 @pytest.fixture

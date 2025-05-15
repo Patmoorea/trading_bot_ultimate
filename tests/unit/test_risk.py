@@ -1,4 +1,4 @@
-from core.risk import RiskManager
+from src.core_merged.risk import RiskManager
 
 def test_max_drawdown():
     rm = RiskManager(max_drawdown=0.05)

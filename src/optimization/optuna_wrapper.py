@@ -4,7 +4,7 @@ import optuna
 def tune_hyperparameters():
     """Optimisation des hyperparamètres avec Optuna"""
     # Import retardé pour éviter les dépendances circulaires
-    from src.core.ai_engine import HybridAI
+    from src.core_merged.ai_engine import HybridAI
 
     def objective(trial):
         model = HybridAI()

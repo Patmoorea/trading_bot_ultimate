@@ -1,5 +1,5 @@
 import tensorflow as tf
-from core.gpu_config import configure_gpu
+from src.core_merged.gpu_config import configure_gpu
 from test_ai_final import main as test_ai
 from test_gpu_perf import test_gpu
 

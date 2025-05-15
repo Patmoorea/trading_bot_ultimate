@@ -15,13 +15,13 @@ def run_optimization(base_model=None, n_trials=100):
         
         # Nouvelle implémentation progressive
         if base_model is None:
-            from core.base_model import create_base_model
+            from src.core_merged.base_model import create_base_model
             base_model = create_base_model()
             
         return {"status": "optimisation_partielle", "trials": n_trials}
         
     except Exception as e:
-        from core.logger import log_error
+        from src.core_merged.logger import log_error
         log_error(f"Optimization échouée: {str(e)}")
         return base_model  # Fallback
 def run_optimization(base_model=None, n_trials=100, **kwargs):

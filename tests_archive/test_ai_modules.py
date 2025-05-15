@@ -5,7 +5,7 @@ class TestAIModules:
     def test_import(self):
         """Test d'import de base"""
         try:
-            from src.core.ai_engine import HybridAI
+            from src.core_merged.ai_engine import HybridAI
             assert True
         except ImportError:
             assert False, "Erreur d'import HybridAI"

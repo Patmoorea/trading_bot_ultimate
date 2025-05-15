@@ -80,8 +80,8 @@ model = create_keras_model()
 model.summary()
 
 # Ajout en tête de fichier (après les autres imports)
-from core.performance import check_performance_threshold
-from core.monitoring import get_gpu_temp
+from src.core_merged.performance import check_performance_threshold
+from src.core_merged.monitoring import get_gpu_temp
 
 def init_hardware():
     """Initialisation matérielle"""

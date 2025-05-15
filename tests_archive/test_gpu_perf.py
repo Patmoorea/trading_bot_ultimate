@@ -1,5 +1,5 @@
 import tensorflow as tf
-from src.core.gpu_config import configure_gpu
+from src.core_merged.gpu_config import configure_gpu
 
 def test_gpu():
     print("=== Test TensorFlow ===")

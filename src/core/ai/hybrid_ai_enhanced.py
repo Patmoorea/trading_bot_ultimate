@@ -1,6 +1,6 @@
 """Module d'IA hybride amélioré"""
 import numpy as np
-from core.base_model import BaseModel
+from src.core_merged.base_model import BaseModel
 
 class HybridAIEnhanced:
     def __init__(self):
@@ -21,7 +21,7 @@ class HybridAIEnhanced:
 def predict(self, X, **kwargs):
     """Prédiction compatible avec fallback (ajout sécurisé)"""
     if not hasattr(self, '_fallback_model'):
-        from core.base_model import BaseModel
+        from src.core_merged.base_model import BaseModel
         self._fallback_model = BaseModel().compile()
     
     try:

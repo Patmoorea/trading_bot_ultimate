@@ -1,4 +1,4 @@
-from src.core.ai.hybrid_ai_enhanced import HybridAIEnhanced
+from src.core_merged.ai.hybrid_ai_enhanced import HybridAIEnhanced
 import pytest
 import asyncio
 

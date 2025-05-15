@@ -1,7 +1,7 @@
 import tensorflow as tf
 import optuna
 from tensorflow.keras.optimizers import Adam
-from core.gpu_config import configure_gpu
+from src.core_merged.gpu_config import configure_gpu
 
 
 def run_optimization(model, X_train, y_train, X_val, y_val, n_trials=5):

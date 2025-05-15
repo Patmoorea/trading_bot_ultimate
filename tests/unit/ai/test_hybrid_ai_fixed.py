@@ -1,6 +1,6 @@
 try:
-    from src.core.ai.hybrid_ai_enhanced import HybridAIEnhanced
-    from src.core.utils import optimize_for_m4
+    from src.core_merged.ai.hybrid_ai_enhanced import HybridAIEnhanced
+    from src.core_merged.utils import optimize_for_m4
 except ImportError as e:
     print(f"ImportError: {str(e)}")
     HybridAIEnhanced = None
@@ -15,8 +15,8 @@ class TestHybridAIPerformance:
 
 # Évolution : Ajout de l'affichage pour vérifier l'import effectif de HybridAIEnhanced
 try:
-    from src.core.ai.hybrid_ai_enhanced import HybridAIEnhanced as HybridAIEnhanced_V2
-    from src.core.utils import optimize_for_m4 as optimize_for_m4_V2
+    from src.core_merged.ai.hybrid_ai_enhanced import HybridAIEnhanced as HybridAIEnhanced_V2
+    from src.core_merged.utils import optimize_for_m4 as optimize_for_m4_V2
     print("✅ HybridAIEnhanced_V2 imported:", HybridAIEnhanced_V2)
 except ImportError as e:
     print(f"ImportError in V2 import block: {str(e)}")
@@ -37,7 +37,7 @@ print("✅ DEBUG: HybridAIEnhanced_V2 is", HybridAIEnhanced_V2)
 
 def test_import_direct_hybridai_v2():
     try:
-        from src.core.ai.hybrid_ai_enhanced import HybridAIEnhanced as HybridAIEnhanced_V2_direct
+        from src.core_merged.ai.hybrid_ai_enhanced import HybridAIEnhanced as HybridAIEnhanced_V2_direct
         print("✅ Direct import HybridAIEnhanced_V2_direct:", HybridAIEnhanced_V2_direct)
     except ImportError as e:
         pytest.fail(f"ImportError direct: {str(e)}")

@@ -58,7 +58,7 @@ else:
 
 def get_enhanced_sentiment(text):
     """Version optimisée utilisant le core"""
-    from core.news.sentiment import EnhancedNewsAnalyzer
+    from src.core_merged.news.sentiment import EnhancedNewsAnalyzer
     analyzer = EnhancedNewsAnalyzer()
     try:
         result = analyzer.analyze(text)

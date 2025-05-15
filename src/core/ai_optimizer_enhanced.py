@@ -1,5 +1,5 @@
 import optuna
-from src.core.config import Config
+from src.core_merged.config import Config
 
 class AIOptimizer:
     def __init__(self):

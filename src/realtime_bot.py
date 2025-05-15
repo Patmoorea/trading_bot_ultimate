@@ -4,7 +4,7 @@ import asyncio
 import websockets
 from pandas import DataFrame, Series, read_csv, to_numeric
 from typing import Dict, List
-from core.technical_engine import TechnicalEngine
+from src.core_merged.technical_engine import TechnicalEngine
 
 # ============ NOUVELLE FONCTIONNALITÉ ============ #
 def safe_log(message: str, level: str = "info"):

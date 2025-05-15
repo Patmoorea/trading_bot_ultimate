@@ -1,5 +1,5 @@
 import numpy as np
-from src.core.engine import TradingEngine
+from src.core_merged.engine import TradingEngine
 
 def run_simulation():
     engine = TradingEngine(mode='test')

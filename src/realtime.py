@@ -13,7 +13,7 @@ import pandas as pd
 from pandas import Series, to_numeric
 
 # IMPORTS LOCAUX (chemin corrigé)
-from core.technical import utils as technical_utils
+from src.core_merged.technical import utils as technical_utils
 
 # CONFIGURATION LOGGING (nouveau)
 logger = logging.getLogger(__name__)

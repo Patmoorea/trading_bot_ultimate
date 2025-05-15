@@ -1,5 +1,5 @@
 from .indicators import MultiTimeframeAnalyzer, VolatilityAnalyzer
-from src.core.config import Config
+from src.core_merged.config import Config
 import pandas as pd
 
 class TechnicalAnalyzer:

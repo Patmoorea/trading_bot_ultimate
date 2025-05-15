@@ -1,6 +1,6 @@
 import pytest
 import pandas as pd
-from src.core.technical import TechnicalAnalyzer
+from src.core_merged.technical import TechnicalAnalyzer
 
 @pytest.fixture
 def sample_data():

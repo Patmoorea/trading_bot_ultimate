@@ -3,7 +3,7 @@ Analyse multi-timeframe et volatilité
 """
 
 try:
-    from src.core.config import Config
+    from src.core_merged.config import Config
 except ImportError:
     class Config:
         USE_NUMBA = False

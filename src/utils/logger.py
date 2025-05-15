@@ -39,3 +39,9 @@ logger.addHandler(file_handler)
 
 def get_logger():
     return logger
+
+# Ajout en tête de fichier
+import os
+
+# Modification après getLogger
+logger.setLevel(os.getenv('LOG_LEVEL', 'INFO'))

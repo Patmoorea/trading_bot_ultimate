@@ -1,7 +1,7 @@
-from core.gpu_config import configure_gpu
+from src.core_merged.gpu_config import configure_gpu
 import numpy as np
-from src.core.ai_optimizer_fallback import run_optimization
-from src.core.base_model import create_base_model
+from src.core_merged.ai_optimizer_fallback import run_optimization
+from src.core_merged.base_model import create_base_model
 
 def main():
     configure_gpu()

@@ -1,5 +1,5 @@
 import tensorflow as tf
-from core.gpu_setup import GPU_AVAILABLE
+from src.core_merged.gpu_setup import GPU_AVAILABLE
 
 
 class TradingModel:

@@ -1,6 +1,6 @@
 import torch
 import time
-from src.core.mps_fixed import device
+from src.core_merged.mps_fixed import device
 
 def safe_benchmark():
     try:

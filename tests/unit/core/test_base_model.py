@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from core.base_model import BaseModel
+from src.core_merged.base_model import BaseModel
 
 def test_base_model_compile():
     model = BaseModel()

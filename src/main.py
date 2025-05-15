@@ -1,8 +1,10 @@
+from dotenv import load_dotenvnload_dotenv()nconfig = {"NEWS": {"enabled": False, "TELEGRAM_TOKEN": os.getenv("TELEGRAM_TOKEN")}}
+config = {"NEWS": {"enabled": False}}
 import logging
 import time
 import pandas as pd
-from core.engine import TradingEngine
-from core.technical_engine import TechnicalEngine
+from src.core.engine import TradingEngine
+from src.core.technical_engine import TechnicalEngine
 
 # Configuration du logging
 logging.basicConfig(
@@ -60,3 +62,19 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# Initialisation du module news
+try:
+    from src.modules.news.start_service import start_news_monitoring
+    news_monitor = start_news_monitoring(config['NEWS'])
+except ImportError as e:
+    print(f"News module not available: {e}")
+
+# Initialisation du module News
+try:
+    from src.modules.news import EnhancedNewsProcessor
+    print("Initializing News Monitoring System...")
+    news_processor = EnhancedNewsProcessor()
+    print("Active components:", news_processor.check_components())
+except Exception as e:
+    print(f"News module initialization failed: {e}")

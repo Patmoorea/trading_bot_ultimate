@@ -2,8 +2,8 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 import numpy as np
-from src.core.base_model import create_base_model
-from src.core.ai_optimizer import run_optimization
+from src.core_merged.base_model import create_base_model
+from src.core_merged.ai_optimizer import run_optimization
 
 # Generate synthetic data
 X_val = np.random.rand(100, 100, 5)

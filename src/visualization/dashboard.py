@@ -1,6 +1,6 @@
 """Dashboard interactif avec tests intégrés"""
 import plotly.graph_objects as go
-from core.config import Config
+from src.core_merged.config import Config
 
 class TradingDashboard:
     def __init__(self):
