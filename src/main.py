@@ -47,3 +47,34 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# ========== NOUVEAUX MODULES ==========
+from news_processor.core import NewsSentimentAnalyzer
+from regime_detection.hmm_kmeans import MarketRegimeDetector
+from liquidity_heatmap.visualization import generate_heatmap
+from quantum_ml.qsvm import QuantumSVM
+
+class TradingBot:
+    def __init__(self):
+        # [...] Code existant conservé
+        self.news_analyzer = NewsSentimentAnalyzer()
+        self.regime_detector = MarketRegimeDetector()
+        self.qsvm = QuantumSVM()
+
+    def update_heatmap(self):
+        orderbook = self.exchange.fetch_order_book("BTC/USDT")
+        self.current_heatmap = generate_heatmap(orderbook)
+
+# ========== IMPORT OPTIMISÉ (AJOUT SEULEMENT) ==========
+try:
+    from src.news_processor.core import CachedNewsSentimentAnalyzer as NewsAnalyzer
+    from src.regime_detection.hmm_kmeans import OptimizedMarketRegimeDetector as RegimeDetector
+    print("✓ Versions optimisées chargées")
+except ImportError:
+    from src.news_processor.core import NewsSentimentAnalyzer as NewsAnalyzer
+    from src.regime_detection.hmm_kmeans import MarketRegimeDetector as RegiseDetector
+    print("ℹ Versions standard chargées (fallback)")
+
+# Utilisation transparente :
+bot_analyzer = NewsAnalyzer()  # Utilise automatiquement la version optimisée si disponible
+bot_regime_detector = RegimeDetector()

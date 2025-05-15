@@ -12,3 +12,11 @@ class Config:
     # Debug
     DEBUG = False
     LOG_LEVEL = 'INFO'
+USE_OPTIMIZED = True  # Passer à False pour désactiver
+
+if USE_OPTIMIZED:
+    from src.news_processor.core import CachedNewsSentimentAnalyzer as NewsAnalyzer
+    from src.regime_detection.hmm_kmeans import OptimizedMarketRegimeDetector as RegimeDetector
+else:
+    from src.news_processor.core import NewsSentimentAnalyzer as NewsAnalyzer
+    from src.regime_detection.hmm_kmeans import MarketRegimeDetector as RegimeDetector
