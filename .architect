@@ -1,0 +1,7 @@
+modules:
+  - name: core
+    path: src/core
+  - name: data
+    path: src/data
+  - name: strategies
+    path: src/strategies

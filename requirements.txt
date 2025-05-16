@@ -1,3 +1,8 @@
 lz4==3.1.3
 numpy>=1.21.0
 websockets>=10.0
+
+# Nouvelles dépendances
+lz4==4.3.2
+transformers==4.30.2
+finbert-embedding==0.1.6

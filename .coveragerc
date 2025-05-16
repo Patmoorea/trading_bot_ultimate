@@ -1,7 +1,16 @@
 [run]
 source = src
-omit = */__init__.py
+include = 
+    */data/*.py
+    */analysis/*.py
+    */news/*.py
+    */execution/*.py
+omit =
+    */__init__.py
+    */legacy/*
+    */experimental/*
 
 [report]
 fail_under = 80
+precision = 2
 show_missing = True

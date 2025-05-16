@@ -1,0 +1,9 @@
+{
+  "modules": {
+    "core": "src/core",
+    "data": "src/data",
+    "strategies": "src/strategies",
+    "execution": "src/execution"
+  },
+  "exclusions": ["__pycache__", "tests", "legacy"]
+}
