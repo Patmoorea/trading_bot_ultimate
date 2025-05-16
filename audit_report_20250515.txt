@@ -735,4 +735,4 @@ ERROR tests/integration/test_arbitrage_integration.py
 ERROR tests/strategies/arbitrage/test_integration.py
 ERROR tests/strategies/arbitrage/test_real_arbitrage.py
 !!!!!!!!!!!!!!!!!!! Interrupted: 3 errors during collection !!!!!!!!!!!!!!!!!!!!
-======================== 2 warnings, 3 errors in 8.87s =========================
+======================== 2 warnings, 3 errors in 9.53s =========================
