@@ -74,3 +74,9 @@ dist/
 *.log
 *.csv
 temp/
+
+# Fichiers temporaires
+.coverage*
+validate*.sh
+* 2/
+
