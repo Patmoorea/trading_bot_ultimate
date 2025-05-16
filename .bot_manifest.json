@@ -1,8 +1,15 @@
 {
   "project_id": "trading_bot_ultimate",
-  "last_scan": "2025-05-16T17:00:06Z",
+  "last_scan": "2025-05-16T17:45:32Z",
   "file_map": {
-
+  },
+  "critical_modules": {
+    "news_analysis":        0,
+    "adaptive_stoploss":        0,
+    "usdc_arbitrage":        0,
+    "telegram_integration":        0,
+    "order_optimization":        0,
+    "checked_at": "2025-05-16T17:45:32Z"
   },
   "checksum": "1f2ea7ce0de173c3a26c252a885a3a56aa1b7c18b5000f2395f22ed176a29fc4"
 }
