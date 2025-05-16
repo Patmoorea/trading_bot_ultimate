@@ -1,11 +1,16 @@
-import finbert_embedding
-from transformers import AutoTokenizer
+from transformers import pipeline
 
 class NewsAnalyzer:
-    """Analyse 12 sources avec FinBERT customisé"""
     def __init__(self):
-        self.tokenizer = AutoTokenizer.from_pretrained("finbert")
-        self.model = finbert_embedding.FinbertEmbedding()
-
-    def score_impact(self, text):
-        return self.model.sentiment(text).mean().item()  # Score 0-1
+        try:
+            self.analyzer = pipeline("sentiment-analysis")
+        except Exception as e:
+            print(f"Warning: Failed to initialize sentiment analyzer - {str(e)}")
+            self.analyzer = None
+    
+    def analyze_news(self, text: str) -> float:
+        if self.analyzer is None:
+            return 0.5  # Valeur neutre par défaut
+        
+        result = self.analyzer(text)
+        return result[0]['score'] if result[0]['label'] == 'POSITIVE' else 1 - result[0]['score']
