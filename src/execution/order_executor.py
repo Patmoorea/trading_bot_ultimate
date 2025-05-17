@@ -24,10 +24,11 @@ class OrderExecutor:
             }
         })
     
-    async def execute_order(self, order: Dict[str, Any]):
+    def execute_order(self, order: Dict[str, Any]):
+        """Version synchrone pour simplifier"""
         try:
             symbol = order['symbol'].replace('/', '')
-            return await self.exchange.create_order(
+            return self.exchange.create_order(
                 symbol,
                 'limit',
                 order['action'],
@@ -39,7 +40,7 @@ class OrderExecutor:
             print(f"Erreur d'exécution: {e}")
             return None
 
-async def main():
+def main():
     executor = OrderExecutor()
     test_order = {
         'symbol': 'BTC/USDT',
@@ -47,8 +48,8 @@ async def main():
         'amount': 0.01,
         'price': 50000
     }
-    result = await executor.execute_order(test_order)
+    result = executor.execute_order(test_order)
     print("Résultat:", result)
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    main()

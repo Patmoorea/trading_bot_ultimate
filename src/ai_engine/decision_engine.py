@@ -1,39 +1,32 @@
 import numpy as np
-import gymnasium as gym
-from gymnasium import spaces
-from stable_baselines3.common.vec_env import DummyVecEnv
-from ppo_transformer import create_ppo_model
-
-class TradingEnv(gym.Env):
-    def __init__(self):
-        self.observation_space = spaces.Box(low=-10, high=10, shape=(256,))
-        self.action_space = spaces.Discrete(3)  # 0=hold, 1=buy, 2=sell
-        
-    def reset(self, seed=None, options=None):
-        return np.random.rand(256), {}
-        
-    def step(self, action):
-        obs = np.random.rand(256)
-        reward = 0.1 if action == 1 else -0.1 if action == 2 else 0
-        terminated = False
-        truncated = False
-        info = {}
-        return obs, reward, terminated, truncated, info
+from sklearn.linear_model import SGDClassifier
 
 class DecisionEngine:
     def __init__(self):
-        self.technical_model = None  # Initialisé plus tard
-        env = DummyVecEnv([lambda: TradingEnv()])
-        self.strategy_model = create_ppo_model(env)
+        # Modèle simple mais efficace
+        self.model = SGDClassifier(loss='log_loss')
+        # Entraînement initial fictif
+        X = np.random.rand(100, 2)  # close, volume
+        y = np.random.randint(0, 3, 100)  # 0=hold, 1=buy, 2=sell
+        self.model.fit(X, y)
         
     def make_decision(self, market_data):
-        obs = np.random.rand(256)  # Simulation
-        action, _ = self.strategy_model.predict(obs)
-        return {
-            'action': ['hold', 'buy', 'sell'][action],
-            'confidence': 0.8
-        }
+        try:
+            inputs = np.array([[
+                market_data.get('close', 0),
+                market_data.get('volume', 0)
+            ]])
+            pred = self.model.predict_proba(inputs)[0]
+            actions = ['hold', 'buy', 'sell']
+            idx = pred.argmax()
+            return {
+                'action': actions[idx],
+                'confidence': float(pred.max())
+            }
+        except Exception as e:
+            print(f"Decision error: {e}")
+            return {'action': 'hold', 'confidence': 0.5}
 
 if __name__ == '__main__':
     engine = DecisionEngine()
-    print(engine.make_decision({}))
+    print(engine.make_decision({'close': 50000, 'volume': 1000}))
