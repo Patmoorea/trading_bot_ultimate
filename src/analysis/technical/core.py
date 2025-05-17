@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 from typing import Dict, List, Tuple
 
-class TechnicalAnalyzer:
+class TechnicalIndicators:
     def __init__(self):
         self.indicators = {
             'trend': self._init_trend_indicators(),
@@ -166,3 +166,39 @@ class TechnicalAnalyzer:
                     print(f"Error calculating {name}: {str(e)}")
                     results[category][name] = None
         return results
+
+    # ======================
+    # AJOUTS DES INDICATEURS MANQUANTS
+    # ======================
+
+    def _init_momentum_indicators(self) -> Dict:
+        """Initialise les 9 indicateurs de momentum"""
+        return {
+            'rsi': self.calculate_rsi,
+            'stoch_rsi': self.calculate_stoch_rsi,
+            'macd': self.calculate_macd,
+            'cci': self.calculate_cci,
+            'awesome_oscillator': self.calculate_awesome_osc,
+            'stochastic': self.calculate_stochastic,
+            'williams_r': self.calculate_williams_r,
+            'ultimate_oscillator': self.calculate_ultimate_osc,
+            'kst': self.calculate_kst
+        }
+
+    def calculate_rsi(self, close: pd.Series, period=14) -> pd.Series:
+        """Relative Strength Index"""
+        delta = close.diff()
+        gain = delta.where(delta > 0, 0)
+        loss = -delta.where(delta < 0, 0)
+        avg_gain = gain.rolling(period).mean()
+        avg_loss = loss.rolling(period).mean()
+        rs = avg_gain / avg_loss
+        return 100 - (100 / (1 + rs))
+
+    def calculate_stoch_rsi(self, close: pd.Series, period=14) -> pd.Series:
+        """Stochastic RSI"""
+        rsi = self.calculate_rsi(close, period)
+        stoch = (rsi - rsi.rolling(period).min()) / (rsi.rolling(period).max() - rsi.rolling(period).min())
+        return stoch * 100
+
+    # [Continuer avec les autres indicateurs manquants...]

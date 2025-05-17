@@ -20,3 +20,10 @@ if USE_OPTIMIZED:
 else:
     from src.news_processor.core import NewsSentimentAnalyzer as NewsAnalyzer
     from src.regime_detection.hmm_kmeans import MarketRegimeDetector as RegimeDetector
+
+# Optimisation Apple Silicon
+M4_OPTIMIZATION = {
+    'tf_device': '/device:apple_m1',  # Compatible M4
+    'memory_limit': 12288,  # 12GB pour 16GB RAM
+    'use_metal': True
+}
