@@ -1,33 +1,27 @@
 #!/bin/bash
-clear
 
-echo "=== NETTOYAGE DU CACHE PYTHON ==="
-find . -name "*.pyc" -delete
-find . -name "__pycache__" -exec rm -rf {} +
+# Couleurs pour la sortie
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
 
-echo "=== LANCEMENT DES TESTS ==="
-pytest tests/unit/test_technical_analysis.py -v \
-  --cov=src/analysis/technical/advanced \
-  --cov-report=term-missing \
-  --cov-fail-under=80
+echo -e "${YELLOW}Running Unit Tests...${NC}"
+PYTHONPATH=src pytest tests/unit -v --tb=short --cov=src --cov-report=term-missing
 
-echo "=== GENERATION DU RAPPORT HTML ==="
-pytest --cov=src --cov-report=html
+echo -e "\n${YELLOW}Running Integration Tests...${NC}"
+PYTHONPATH=src pytest tests/integration -v --tb=short
 
-echo "=== VERIFICATION MANUELLE ==="
-python -c "
-from src.analysis.technical.advanced.liquidity import liquidity_wave
-test_data = {
-    'normal': ({'bids': [[100,2]], 'asks': [[101,1]]}, 0.3333333),
-    'empty': ({'bids': [], 'asks': []}, 'error'),
-    'precision': ({'bids': [[100,1.0000001]], 'asks': [[101,1]]}, 0.00000005)
-}
+echo -e "\n${YELLOW}Running Functional Tests...${NC}"
+PYTHONPATH=src pytest tests/functional -v --tb=short
 
-for name, (data, expected) in test_data.items():
-    try:
-        result = liquidity_wave(data)
-        assert abs(result - expected) < 1e-6 if name != 'empty' else False
-        print(f'✓ {name} test passed')
-    except ValueError:
-        print(f'✓ {name} test raised expected error')
-"
+# Vérifier la couverture
+coverage_minimum=80.0
+current_coverage=$(coverage report | tail -n 1 | awk '{print $4}' | tr -d '%')
+
+if (( $(echo "$current_coverage < $coverage_minimum" | bc -l) )); then
+    echo -e "${RED}Coverage is below ${coverage_minimum}% (current: ${current_coverage}%)${NC}"
+    exit 1
+else
+    echo -e "${GREEN}Coverage is good: ${current_coverage}%${NC}"
+fi

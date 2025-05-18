@@ -1,2 +1,4 @@
-"""Trading Bot Ultimate - Core Package"""
-from .analysis.technical import TechnicalAnalyzer
+"""
+Trading Bot Ultimate
+"""
+__version__ = '0.1.0'
