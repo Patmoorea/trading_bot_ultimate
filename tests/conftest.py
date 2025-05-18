@@ -1,21 +1,16 @@
 import pytest
-import sys
 import os
-from pathlib import Path
+import sys
 
-# Ajoute le répertoire src au PYTHONPATH
-sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
+# Ajout du chemin src au PYTHONPATH
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-@pytest.fixture
-def mock_order_book():
-    return {
-        'bids': [[50000, 1]],
-        'asks': [[50500, 1]]
-    }
-
-@pytest.fixture
-def mock_markets():
-    return {
-        'BTC/USDC': {'active': True},
-        'ETH/USDC': {'active': True}
-    }
+@pytest.fixture(autouse=True)
+def setup_test_env():
+    # Configuration de l'environnement de test
+    os.environ['TESTING'] = 'true'
+    os.environ['API_KEY'] = 'test_key'
+    os.environ['API_SECRET'] = 'test_secret'
+    yield
+    # Nettoyage après les tests
+    os.environ.pop('TESTING', None)
