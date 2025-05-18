@@ -1,41 +1,69 @@
-import asyncio
-from datetime import datetime, timedelta
+from typing import Dict, List
 import pandas as pd
-import numpy as np
+from datetime import datetime, timedelta
+import logging
+import asyncio
+from ..exchanges.base_exchange import BaseExchange
 
 class MarketDataCollector:
-    def __init__(self, exchange_clients):
-        self.exchange_clients = exchange_clients
-        self.data_cache = {}
+    def __init__(self, exchange: BaseExchange):
+        self.exchange = exchange
+        self.logger = logging.getLogger(__name__)
+        self.cache = {}
+        self.cache_duration = timedelta(minutes=5)
+
+    async def get_ticker_data(self, symbol: str) -> Dict:
+        cache_key = f"ticker_{symbol}"
         
-    async def fetch_ohlcv(self, exchange, symbol, timeframe, limit=100):
-        """
-        Récupère les données OHLCV de manière asynchrone
-        """
+        # Vérification du cache
+        if cache_key in self.cache:
+            cached_data, timestamp = self.cache[cache_key]
+            if datetime.now() - timestamp < self.cache_duration:
+                return cached_data
+
         try:
-            ohlcv = await self.exchange_clients[exchange].fetch_ohlcv(
-                symbol, timeframe, limit=limit
+            ticker_data = await asyncio.to_thread(self.exchange.get_ticker, symbol)
+            self.cache[cache_key] = (ticker_data, datetime.now())
+            return ticker_data
+        except Exception as e:
+            self.logger.error(f"Erreur get_ticker_data: {str(e)}")
+            raise
+
+    async def get_historical_data(self, symbol: str, timeframe: str, 
+                                start_time: datetime, end_time: datetime) -> pd.DataFrame:
+        try:
+            # Conversion des paramètres pour l'API
+            params = {
+                'symbol': symbol,
+                'interval': timeframe,
+                'start': int(start_time.timestamp() * 1000),
+                'end': int(end_time.timestamp() * 1000)
+            }
+
+            # Récupération des données historiques
+            historical_data = await asyncio.to_thread(
+                self.exchange.fetch_ohlcv,
+                symbol,
+                timeframe,
+                params['start'],
+                params['end']
             )
-            
-            df = pd.DataFrame(
-                ohlcv, 
-                columns=['timestamp', 'open', 'high', 'low', 'close', 'volume']
-            )
+
+            # Conversion en DataFrame
+            df = pd.DataFrame(historical_data, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
             df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
             df.set_index('timestamp', inplace=True)
             
-            cache_key = f"{exchange}_{symbol}_{timeframe}"
-            self.data_cache[cache_key] = df
-            
             return df
-            
+
         except Exception as e:
-            raise Exception(f"Erreur lors de la récupération des données: {str(e)}")
+            self.logger.error(f"Erreur get_historical_data: {str(e)}")
+            raise
 
-    def get_cached_data(self, exchange, symbol, timeframe):
-        """
-        Récupère les données du cache
-        """
-        cache_key = f"{exchange}_{symbol}_{timeframe}"
-        return self.data_cache.get(cache_key)
-
+    def save_to_csv(self, data: pd.DataFrame, filename: str):
+        try:
+            data.to_csv(filename)
+            self.logger.info(f"Données sauvegardées dans {filename}")
+        except Exception as e:
+            self.logger.error(f"Erreur save_to_csv: {str(e)}")
+            raise

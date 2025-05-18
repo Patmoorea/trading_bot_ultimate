@@ -4,9 +4,9 @@ from ..base_exchange import BaseExchange
 import ccxt
 import logging
 
-class GateIOClient(BaseExchange):
+class BlofinClient(BaseExchange):
     def _initialize_exchange(self):
-        self.exchange = ccxt.gateio({
+        self.exchange = ccxt.blofin({
             'apiKey': self.api_key,
             'secret': self.secret,
             'enableRateLimit': True
@@ -23,7 +23,7 @@ class GateIOClient(BaseExchange):
                 'volume': Decimal(str(ticker['baseVolume']))
             }
         except Exception as e:
-            self.logger.error(f"Erreur Gate.io get_ticker: {str(e)}")
+            self.logger.error(f"Erreur Blofin get_ticker: {str(e)}")
             raise
 
     def get_balance(self) -> Dict:
@@ -39,7 +39,7 @@ class GateIOClient(BaseExchange):
                 if bal['total'] > 0
             }
         except Exception as e:
-            self.logger.error(f"Erreur Gate.io get_balance: {str(e)}")
+            self.logger.error(f"Erreur Blofin get_balance: {str(e)}")
             raise
 
     def place_order(self, symbol: str, side: str, amount: Decimal, 
@@ -55,7 +55,7 @@ class GateIOClient(BaseExchange):
             )
             return order
         except Exception as e:
-            self.logger.error(f"Erreur Gate.io place_order: {str(e)}")
+            self.logger.error(f"Erreur Blofin place_order: {str(e)}")
             raise
 
     def get_order_book(self, symbol: str) -> Dict:
@@ -68,5 +68,5 @@ class GateIOClient(BaseExchange):
                         for price, amount in book['asks']]
             }
         except Exception as e:
-            self.logger.error(f"Erreur Gate.io get_order_book: {str(e)}")
+            self.logger.error(f"Erreur Blofin get_order_book: {str(e)}")
             raise
