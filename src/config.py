@@ -1,29 +1,53 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 class Config:
-    # Configuration Numba
-    USE_NUMBA = True  # Mettez False si Numba n'est pas installé
-    
-    # Configuration GPU/CPU
-    USE_GPU = True
-    
-    # Paramètres de trading
-    MAX_DRAWDOWN = 0.05
-    DAILY_STOP_LOSS = 0.02
-    
-    # Debug
-    DEBUG = False
-    LOG_LEVEL = 'INFO'
-USE_OPTIMIZED = True  # Passer à False pour désactiver
+    # Test Mode
+    IS_TEST = os.getenv('IS_TEST', 'false').lower() == 'true'
 
-if USE_OPTIMIZED:
-    from src.news_processor.core import CachedNewsSentimentAnalyzer as NewsAnalyzer
-    from src.regime_detection.hmm_kmeans import OptimizedMarketRegimeDetector as RegimeDetector
-else:
-    from src.news_processor.core import NewsSentimentAnalyzer as NewsAnalyzer
-    from src.regime_detection.hmm_kmeans import MarketRegimeDetector as RegimeDetector
+    # Telegram Configuration
+    _TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+    _TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
+    
+    # Exchange Configuration
+    _EXCHANGE_API_KEY = os.getenv('EXCHANGE_API_KEY')
+    _EXCHANGE_API_SECRET = os.getenv('EXCHANGE_API_SECRET')
+    
+    # AI Model Configuration
+    MODEL_PATH = os.getenv('MODEL_PATH', 'models/')
+    
+    # Performance Configuration
+    PERFORMANCE_LOG_PATH = os.getenv('PERFORMANCE_LOG_PATH', 'logs/performance/')
 
-# Optimisation Apple Silicon
-M4_OPTIMIZATION = {
-    'tf_device': '/device:apple_m1',  # Compatible M4
-    'memory_limit': 12288,  # 12GB pour 16GB RAM
-    'use_metal': True
-}
+    @classmethod
+    def validate(cls):
+        if cls.IS_TEST:
+            return
+            
+        required_vars = [
+            'TELEGRAM_BOT_TOKEN',
+            'TELEGRAM_CHAT_ID',
+            'EXCHANGE_API_KEY',
+            'EXCHANGE_API_SECRET'
+        ]
+        for var in required_vars:
+            if not getattr(cls, var.lower()):
+                raise ValueError(f"Missing required environment variable: {var}")
+
+    @classmethod
+    def telegram_bot_token(cls):
+        return cls._TELEGRAM_BOT_TOKEN if not cls.IS_TEST else 'test_token'
+
+    @classmethod
+    def telegram_chat_id(cls):
+        return cls._TELEGRAM_CHAT_ID if not cls.IS_TEST else 'test_chat_id'
+
+    @classmethod
+    def exchange_api_key(cls):
+        return cls._EXCHANGE_API_KEY if not cls.IS_TEST else 'test_key'
+
+    @classmethod
+    def exchange_api_secret(cls):
+        return cls._EXCHANGE_API_SECRET if not cls.IS_TEST else 'test_secret'
