@@ -1,82 +1,27 @@
-# Fichiers système
-.DS_Store
-*.swp
-*.bak
-
-# Environnement Python
-.venv/
-venv*/
+# Python
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
-*.so
-
-# Fichiers de données et logs
-/logs/
-*.log
-*.data
-*.prof
-*.csv
-
-# Dossiers inutiles
-archive/
-.benchmarks/
-.coverage
-analysis_files.zip
-*.prof
-
-# Fichiers sensibles
+*.class
+.Python
 .env
-.env.*
-secrets.*
-
-# Dossiers à toujours ignorer
-trading_bot/
-trading_bot_backup/
-trading_bot_OLD/
-trading_bot_temp/
-
-# Environnements virtuels
+venv/
 .venv/
-venv*/
-.DS_Store
-# Fichiers temporaires
-*.backup*
-*.new
-*_save.*
-*_save_*
+ENV/
 
-# Fichiers de debug
-debug_*
-test_*.py
-quick_*.py
+# Données et modèles volumineux
+*.model
+*.h5
+*.pkl
+models/
+data/
 
-# Configurations locales
-save_*.yaml
-.DS_Store
-finBERT/
-run_tests_safe.py
-stress_test.py
-*.egg-info/
-
-# Fichiers de packaging Python
-*.egg-info/
-*.egg
-build/
-dist/
-
-# Python packaging
-*.egg-info/
-*.egg
-build/
-dist/
+# Logs et fichiers temporaires
 *.log
-*.csv
-temp/
+logs/
+tmp/
+.DS_Store
 
-# Fichiers temporaires
-.coverage*
-validate*.sh
-* 2/
-
+# IDE
+.idea/
+.vscode/
+*.swp
