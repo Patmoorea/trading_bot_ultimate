@@ -1,4 +1,9 @@
-import tensorflow as tf
+try:
+    import tensorflow as tf
+    TF_AVAILABLE = True
+except ImportError:
+    TF_AVAILABLE = False
+    
 import time
 import os
 import numpy as np
@@ -7,22 +12,34 @@ _OPTIMIZED = False
 _WARMUP_DONE = False
 
 def optimize_for_m4():
-    """Configuration unique pour M4"""
+    """Configuration unique pour M4 avec fallback si TensorFlow n'est pas disponible"""
     global _OPTIMIZED
     if _OPTIMIZED:
         return
     
-    os.environ['TF_METAL_DISABLE_XLA'] = '1'
-    gpus = tf.config.list_physical_devices('GPU')
-    if gpus:
-        try:
-            tf.config.experimental.set_memory_growth(gpus[0], True)
-            tf.config.threading.set_intra_op_parallelism_threads(10)
-            tf.config.threading.set_inter_op_parallelism_threads(4)
-            print('⚡ Optimisation M4 (Metal) - Mémoire dynamique')
+    if not TF_AVAILABLE:
+        print('ℹ️ TensorFlow non disponible, optimisation M4 ignorée')
+        _OPTIMIZED = True
+        return
+    
+    try:
+        os.environ['TF_METAL_DISABLE_XLA'] = '1'
+        gpus = tf.config.list_physical_devices('GPU')
+        if gpus:
+            try:
+                tf.config.experimental.set_memory_growth(gpus[0], True)
+                tf.config.threading.set_intra_op_parallelism_threads(10)
+                tf.config.threading.set_inter_op_parallelism_threads(4)
+                print('⚡ Optimisation M4 (Metal) - Mémoire dynamique')
+                _OPTIMIZED = True
+            except RuntimeError as e:
+                print('⚠️ Erreur configuration GPU:', e)
+        else:
+            print('ℹ️ Pas de GPU détecté, optimisation CPU')
             _OPTIMIZED = True
-        except RuntimeError as e:
-            print('⚠️ Erreur configuration GPU:', e)
+    except Exception as e:
+        print(f'⚠️ Erreur optimisation M4: {e}')
+        _OPTIMIZED = True
 
 def _warmup(matrix_size=1000):
     """Warmup séparé plus intelligent"""
